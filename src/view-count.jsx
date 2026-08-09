@@ -51,9 +51,9 @@ export function ViewCount({ className = "" }) {
 
   const available = Number.isSafeInteger(views);
   const label = available
-    ? `${formatter.format(views)} lifetime views`
+    ? `${formatter.format(views)} views`
     : views === undefined
-      ? "Loading lifetime views"
+      ? "Loading views"
       : "View count unavailable";
 
   return (
@@ -62,7 +62,6 @@ export function ViewCount({ className = "" }) {
       role="status"
       aria-live="polite"
       aria-label={label}
-      title={label}
     >
       <FaRegEye aria-hidden="true" />
       <span className="view-count-number" aria-hidden="true">
