@@ -1,16 +1,14 @@
 import { useCallback, useEffect, useLayoutEffect, useRef, useState } from "react";
-import AnnotatedIndex from "./variants/AnnotatedIndex";
-import ChapterStack from "./variants/ChapterStack";
-import SocialOrbit from "./variants/SocialOrbit";
-import SplitLedger from "./variants/SplitLedger";
-import VisualShelf from "./variants/VisualShelf";
+import { profile } from "../../data";
+import { SocialMorph } from "../../social-preview";
+import Carbon from "./variants/Carbon";
 
 const variants = [
-  { name: "Annotated Index", component: AnnotatedIndex },
-  { name: "Split Ledger", component: SplitLedger },
-  { name: "Visual Shelf", component: VisualShelf },
-  { name: "Chapter Stack", component: ChapterStack },
-  { name: "Social Orbit", component: SocialOrbit },
+  { name: "B&W", theme: "mono", component: Carbon },
+  { name: "Graphite", theme: "graphite", component: Carbon },
+  { name: "Navy", theme: "navy", component: Carbon },
+  { name: "Forest", theme: "forest", component: Carbon },
+  { name: "Plum", theme: "plum", component: Carbon },
 ];
 
 function initialVariant() {
@@ -18,13 +16,40 @@ function initialVariant() {
   return Number.isInteger(value) && value >= 1 && value <= variants.length ? value - 1 : 0;
 }
 
+function initialColorMode() {
+  const saved = window.localStorage.getItem("portfolio-prototype-color-mode");
+  if (saved === "light" || saved === "dark") return saved;
+  return window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
+}
+
 export default function PrototypeGallery() {
   const [active, setActive] = useState(initialVariant);
-  const [replay, setReplay] = useState(0);
+  const [colorMode, setColorMode] = useState(initialColorMode);
+  const [showOpening, setShowOpening] = useState(
+    () => !window.matchMedia("(prefers-reduced-motion: reduce)").matches,
+  );
   const pickerRef = useRef(null);
   const highlightRef = useRef(null);
   const itemRefs = useRef([]);
-  const Variant = variants[active].component;
+  const variant = variants[active];
+  const Variant = variant.component;
+
+  useLayoutEffect(() => {
+    document.documentElement.dataset.prototypeTheme = variant.theme;
+    return () => { delete document.documentElement.dataset.prototypeTheme; };
+  }, [variant.theme]);
+
+  useLayoutEffect(() => {
+    document.documentElement.dataset.colorMode = colorMode;
+    window.localStorage.setItem("portfolio-prototype-color-mode", colorMode);
+    return () => { delete document.documentElement.dataset.colorMode; };
+  }, [colorMode]);
+
+  useEffect(() => {
+    if (!showOpening) return undefined;
+    const timeout = window.setTimeout(() => setShowOpening(false), 1400);
+    return () => window.clearTimeout(timeout);
+  }, [showOpening]);
 
   const moveHighlight = useCallback(() => {
     const item = itemRefs.current[active];
@@ -65,7 +90,6 @@ export default function PrototypeGallery() {
       if (number >= 1 && number <= variants.length) select(number - 1);
       else if (event.key === "ArrowRight") select((active + 1) % variants.length);
       else if (event.key === "ArrowLeft") select((active - 1 + variants.length) % variants.length);
-      else if (event.key === "r" || event.key === "R") setReplay((value) => value + 1);
     };
 
     document.addEventListener("keydown", onKeyDown);
@@ -74,8 +98,14 @@ export default function PrototypeGallery() {
 
   return (
     <>
-      <div id="stage" key={`${active}-${replay}`}>
-        <Variant />
+      <div id="stage" className={`prototype-stage theme-${variant.theme}`} key={active}>
+        <Variant
+          colorMode={colorMode}
+          onToggleColorMode={() => {
+            setColorMode((mode) => (mode === "dark" ? "light" : "dark"));
+          }}
+        />
+        <div className="social-dock"><SocialMorph /></div>
       </div>
 
       <nav ref={pickerRef} className="proto-picker" data-position="top" aria-label="Prototype variants">
@@ -86,23 +116,24 @@ export default function PrototypeGallery() {
             key={variant.name}
             className="proto-picker-item"
             type="button"
-            title={variant.name}
-            aria-label={`${index + 1}: ${variant.name}`}
             aria-current={active === index ? "true" : undefined}
             data-active={active === index ? "" : undefined}
             onClick={() => select(index)}
           >
-            {index + 1}
+            {variant.name}
           </button>
         ))}
-        <span className="proto-picker-divider" aria-hidden="true"></span>
-        <button
-          className="proto-picker-item proto-picker-replay"
-          type="button"
-          aria-label="Replay animation (R)"
-          onClick={() => setReplay((value) => value + 1)}
-        >↻</button>
       </nav>
+
+      {showOpening ? (
+        <div
+          className={`prototype-opening theme-${variant.theme}`}
+          aria-hidden="true"
+          onAnimationEnd={() => setShowOpening(false)}
+        >
+          <span>{profile.name}</span>
+        </div>
+      ) : null}
     </>
   );
 }

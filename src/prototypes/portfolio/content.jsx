@@ -1,86 +1,159 @@
+import { useEffect, useState } from "react";
 import PropTypes from "prop-types";
+import {
+  FaArrowUpRightFromSquare,
+  FaMoon,
+  FaRegEye,
+  FaSun,
+} from "react-icons/fa6";
 import { profile } from "../../data";
-import aemLogo from "../../assets/skills/aem-design.png";
-import dockerLogo from "../../assets/skills/docker.png";
-import flaskLogo from "../../assets/skills/flask.png";
-import gitLogo from "../../assets/skills/git.png";
-import goLogo from "../../assets/skills/gopher-shirt.png";
-import htmlCssLogo from "../../assets/skills/htmlcss.png";
-import javaLogo from "../../assets/skills/java.png";
-import javascriptLogo from "../../assets/skills/js.png";
-import pythonLogo from "../../assets/skills/py.png";
-import rabbitMqLogo from "../../assets/skills/rabbitmq-logo.png";
-import sqlLogo from "../../assets/skills/sql.png";
-import typescriptLogo from "../../assets/skills/tslogo.png";
 
-const skillArtwork = [
-  { name: "Python", src: pythonLogo },
-  { name: "Java", src: javaLogo },
-  { name: "JavaScript", src: javascriptLogo },
-  { name: "TypeScript", src: typescriptLogo },
-  { name: "Go", src: goLogo },
-  { name: "HTML/CSS", src: htmlCssLogo },
-  { name: "Docker", src: dockerLogo },
-  { name: "Flask", src: flaskLogo },
-  { name: "RabbitMQ", src: rabbitMqLogo },
-  { name: "SQL", src: sqlLogo },
-  { name: "Git", src: gitLogo },
-  { name: "Adobe Experience Manager", src: aemLogo },
-];
+const viewCountFormatter = new Intl.NumberFormat("en-US");
+let viewCountRequest;
 
-export function ProjectLinks({ project }) {
+function loadViewCount() {
+  if (viewCountRequest) return viewCountRequest;
+
+  viewCountRequest = fetch("/api/views", {
+    method: "POST",
+    credentials: "same-origin",
+    cache: "no-store",
+  })
+    .then(async (response) => {
+      if (!response.ok) throw new Error("View count request failed");
+
+      const data = await response.json();
+      if (!Number.isSafeInteger(data.views) || data.views < 0) {
+        throw new Error("View count response was invalid");
+      }
+
+      return data.views;
+    })
+    .catch((error) => {
+      viewCountRequest = undefined;
+      throw error;
+    });
+
+  return viewCountRequest;
+}
+
+export function ViewCount() {
+  const [views, setViews] = useState();
+
+  useEffect(() => {
+    let active = true;
+
+    loadViewCount()
+      .then((count) => {
+        if (active) setViews(count);
+      })
+      .catch(() => {
+        if (active) setViews(null);
+      });
+
+    return () => { active = false; };
+  }, []);
+
+  const available = Number.isSafeInteger(views);
+  const label = available
+    ? `${viewCountFormatter.format(views)} lifetime views`
+    : views === undefined
+      ? "Loading lifetime views"
+      : "View count unavailable";
+
   return (
-    <span className="proto-project-links">
-      <a href={project.source} target="_blank" rel="noreferrer">Source</a>
-      {project.demo ? <a href={project.demo} target="_blank" rel="noreferrer">Demo</a> : null}
+    <span
+      className="prototype-view-count"
+      role="status"
+      aria-live="polite"
+      aria-label={label}
+      title={label}
+    >
+      <FaRegEye aria-hidden="true" />
+      <span className="prototype-view-count-number" aria-hidden="true">
+        {available ? viewCountFormatter.format(views) : views === undefined ? "..." : "--"}
+      </span>
     </span>
   );
 }
 
-ProjectLinks.propTypes = {
-  project: PropTypes.shape({
-    demo: PropTypes.string,
-    source: PropTypes.string.isRequired,
-  }).isRequired,
-};
-
-export function SocialTextLinks({ bracketed = false }) {
-  const items = [
-    ["GitHub", profile.github],
-    ["LinkedIn", profile.linkedin],
-    ["X", profile.x],
-  ];
+export function ThemeToggle({ colorMode, onToggle }) {
+  const nextMode = colorMode === "dark" ? "light" : "dark";
+  const Icon = colorMode === "dark" ? FaSun : FaMoon;
 
   return (
-    <nav className="proto-social-links" aria-label="Social profiles">
-      {items.map(([label, href]) => (
-        <a key={label} href={href} target="_blank" rel="noreferrer">
-          {bracketed ? `[${label.toLowerCase()}]` : label}
-        </a>
-      ))}
-    </nav>
+    <button
+      className="prototype-theme-toggle"
+      type="button"
+      aria-label={`Switch to ${nextMode} mode`}
+      title={`Switch to ${nextMode} mode`}
+      onClick={onToggle}
+    >
+      <Icon aria-hidden="true" />
+    </button>
   );
 }
 
-SocialTextLinks.propTypes = {
-  bracketed: PropTypes.bool,
+ThemeToggle.propTypes = {
+  colorMode: PropTypes.oneOf(["light", "dark"]).isRequired,
+  onToggle: PropTypes.func.isRequired,
 };
 
-export function SkillArtwork({ compact = false }) {
+export function PortfolioIdentity({ colorMode, onToggleColorMode }) {
   return (
-    <div className="proto-skill-artwork" data-compact={compact ? "" : undefined}>
-      {skillArtwork.map((skill) => (
-        <figure key={skill.name}>
-          <img src={skill.src} alt="" loading="lazy" />
-          <figcaption>{skill.name}</figcaption>
-        </figure>
-      ))}
+    <div className="prototype-identity">
+      <div>
+        <h1 className="prototype-signature">{profile.name}</h1>
+        <p className="prototype-role">{profile.roles.join(" / ")}</p>
+      </div>
+      <div className="prototype-identity-tools">
+        <ViewCount />
+        <ThemeToggle colorMode={colorMode} onToggle={onToggleColorMode} />
+      </div>
     </div>
   );
 }
 
-SkillArtwork.propTypes = {
-  compact: PropTypes.bool,
+PortfolioIdentity.propTypes = {
+  colorMode: PropTypes.oneOf(["light", "dark"]).isRequired,
+  onToggleColorMode: PropTypes.func.isRequired,
+};
+
+export function ProjectLink({ children, className, project }) {
+  const href = project.detail ?? project.demo ?? project.source;
+  const destination = project.detail
+    ? "Project notes"
+    : project.demo
+      ? "Live project"
+      : "Source code";
+  const isExternal = href.startsWith("http");
+
+  return (
+    <a
+      className={`project-link ${className}`}
+      href={href}
+      target={isExternal ? "_blank" : undefined}
+      rel={isExternal ? "noreferrer" : undefined}
+      aria-label={`${project.title}: ${destination}`}
+    >
+      <div className="project-link-content">{children}</div>
+      <span className="project-link-destination">
+        {destination}
+        <FaArrowUpRightFromSquare aria-hidden="true" />
+      </span>
+    </a>
+  );
+}
+
+ProjectLink.propTypes = {
+  children: PropTypes.node.isRequired,
+  className: PropTypes.string.isRequired,
+  project: PropTypes.shape({
+    detail: PropTypes.string,
+    demo: PropTypes.string,
+    source: PropTypes.string.isRequired,
+    title: PropTypes.string.isRequired,
+  }).isRequired,
 };
 
 export function Period({ children }) {
