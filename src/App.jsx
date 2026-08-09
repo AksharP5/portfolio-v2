@@ -1,5 +1,4 @@
 import { Analytics } from "@vercel/analytics/react";
-import { SpeedInsights } from "@vercel/speed-insights/react";
 import { SocialDocument, SocialHeader, SocialMorph } from "./social-preview";
 
 export default function App() {
@@ -11,7 +10,6 @@ export default function App() {
         <div className="social-dock"><SocialMorph /></div>
       </main>
       <Analytics />
-      <SpeedInsights />
     </>
   );
 }
