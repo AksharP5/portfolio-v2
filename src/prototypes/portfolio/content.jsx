@@ -1,81 +1,11 @@
-import { useEffect, useState } from "react";
 import PropTypes from "prop-types";
 import {
   FaArrowUpRightFromSquare,
   FaMoon,
-  FaRegEye,
   FaSun,
 } from "react-icons/fa6";
 import { profile } from "../../data";
-
-const viewCountFormatter = new Intl.NumberFormat("en-US");
-let viewCountRequest;
-
-function loadViewCount() {
-  if (viewCountRequest) return viewCountRequest;
-
-  viewCountRequest = fetch("/api/views", {
-    method: "POST",
-    credentials: "same-origin",
-    cache: "no-store",
-  })
-    .then(async (response) => {
-      if (!response.ok) throw new Error("View count request failed");
-
-      const data = await response.json();
-      if (!Number.isSafeInteger(data.views) || data.views < 0) {
-        throw new Error("View count response was invalid");
-      }
-
-      return data.views;
-    })
-    .catch((error) => {
-      viewCountRequest = undefined;
-      throw error;
-    });
-
-  return viewCountRequest;
-}
-
-export function ViewCount() {
-  const [views, setViews] = useState();
-
-  useEffect(() => {
-    let active = true;
-
-    loadViewCount()
-      .then((count) => {
-        if (active) setViews(count);
-      })
-      .catch(() => {
-        if (active) setViews(null);
-      });
-
-    return () => { active = false; };
-  }, []);
-
-  const available = Number.isSafeInteger(views);
-  const label = available
-    ? `${viewCountFormatter.format(views)} lifetime views`
-    : views === undefined
-      ? "Loading lifetime views"
-      : "View count unavailable";
-
-  return (
-    <span
-      className="prototype-view-count"
-      role="status"
-      aria-live="polite"
-      aria-label={label}
-      title={label}
-    >
-      <FaRegEye aria-hidden="true" />
-      <span className="prototype-view-count-number" aria-hidden="true">
-        {available ? viewCountFormatter.format(views) : views === undefined ? "..." : "--"}
-      </span>
-    </span>
-  );
-}
+import { ViewCount } from "../../view-count";
 
 export function ThemeToggle({ colorMode, onToggle }) {
   const nextMode = colorMode === "dark" ? "light" : "dark";
@@ -107,7 +37,7 @@ export function PortfolioIdentity({ colorMode, onToggleColorMode }) {
         <p className="prototype-role">{profile.roles.join(" / ")}</p>
       </div>
       <div className="prototype-identity-tools">
-        <ViewCount />
+        <ViewCount className="prototype-view-count" />
         <ThemeToggle colorMode={colorMode} onToggle={onToggleColorMode} />
       </div>
     </div>

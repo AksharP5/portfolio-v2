@@ -1,6 +1,7 @@
 import { useLayoutEffect, useRef, useState } from "react";
 import { FaGithub, FaLinkedin, FaXTwitter } from "react-icons/fa6";
 import { experience, profile, projects, skills } from "./data";
+import { ViewCount } from "./view-count";
 
 const githubContributionRows = [
   "00000000000010000000001111112111100000001100100002031",
@@ -328,8 +329,11 @@ export function SocialDocument() {
 export function SocialHeader() {
   return (
     <header className="portfolio-header">
-      <p>{profile.fullName}</p>
-      <p>{profile.roles.join(" / ")}</p>
+      <p>{profile.name}</p>
+      <div className="portfolio-header-meta">
+        <p>{profile.roles.join(" / ")}</p>
+        <ViewCount className="portfolio-view-count" />
+      </div>
     </header>
   );
 }

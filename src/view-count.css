@@ -1,0 +1,18 @@
+.view-count {
+  display: inline-flex;
+  flex: none;
+  align-items: center;
+  gap: 6px;
+  line-height: 1;
+}
+
+.view-count svg {
+  width: 14px;
+  height: 14px;
+}
+
+.view-count-number {
+  min-width: 3ch;
+  font-variant-numeric: tabular-nums;
+  text-align: right;
+}

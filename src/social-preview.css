@@ -19,10 +19,15 @@
   border-bottom: 1px solid #34332f;
 }
 
-.portfolio-header p:last-child {
+.portfolio-header-meta {
+  display: grid;
+  justify-items: end;
+  gap: 7px;
   color: #77756f;
   text-align: right;
 }
+
+.portfolio-view-count { font-size: 11px; }
 
 .social-document {
   margin-top: 36px;
@@ -419,7 +424,7 @@
   }
 
   .portfolio-header { display: grid; gap: 2px; }
-  .portfolio-header p:last-child { text-align: left; }
+  .portfolio-header-meta { justify-items: start; text-align: left; }
   .social-document-experience p { grid-template-columns: 1fr; gap: 0; margin-bottom: 12px; }
   .social-document-panel { padding-right: 0; padding-left: 0; }
 }
