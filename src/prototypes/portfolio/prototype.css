@@ -301,25 +301,9 @@ button:focus-visible {
 }
 
 .prototype-view-count {
-  display: inline-flex;
-  flex: none;
-  align-items: center;
-  gap: 6px;
   color: var(--portfolio-muted);
   font-family: var(--portfolio-font-meta);
   font-size: 11px;
-  line-height: 1;
-}
-
-.prototype-view-count svg {
-  width: 14px;
-  height: 14px;
-}
-
-.prototype-view-count-number {
-  min-width: 3ch;
-  font-variant-numeric: tabular-nums;
-  text-align: right;
 }
 
 .prototype-theme-toggle {
