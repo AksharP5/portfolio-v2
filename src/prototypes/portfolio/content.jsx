@@ -2,6 +2,8 @@ import PropTypes from "prop-types";
 import {
   FaMoon,
   FaSun,
+  FaVolumeHigh,
+  FaVolumeXmark,
 } from "react-icons/fa6";
 import { ViewCount } from "../../view-count";
 
@@ -27,10 +29,39 @@ ThemeToggle.propTypes = {
   onToggle: PropTypes.func.isRequired,
 };
 
-export function PrototypeTools({ colorMode, onToggleColorMode }) {
+export function SoundToggle({ enabled, onToggle }) {
+  const Icon = enabled ? FaVolumeHigh : FaVolumeXmark;
+  const label = enabled ? "Mute click sounds" : "Enable click sounds";
+
+  return (
+    <button
+      className="prototype-sound-toggle"
+      type="button"
+      aria-label={label}
+      aria-pressed={enabled}
+      title={label}
+      onClick={onToggle}
+    >
+      <Icon aria-hidden="true" />
+    </button>
+  );
+}
+
+SoundToggle.propTypes = {
+  enabled: PropTypes.bool.isRequired,
+  onToggle: PropTypes.func.isRequired,
+};
+
+export function PrototypeTools({
+  colorMode,
+  onToggleColorMode,
+  onToggleSound,
+  soundEnabled,
+}) {
   return (
     <div className="prototype-tools">
       <ViewCount className="prototype-view-count" />
+      <SoundToggle enabled={soundEnabled} onToggle={onToggleSound} />
       <ThemeToggle colorMode={colorMode} onToggle={onToggleColorMode} />
     </div>
   );
@@ -39,6 +70,8 @@ export function PrototypeTools({ colorMode, onToggleColorMode }) {
 PrototypeTools.propTypes = {
   colorMode: PropTypes.oneOf(["light", "dark"]).isRequired,
   onToggleColorMode: PropTypes.func.isRequired,
+  onToggleSound: PropTypes.func.isRequired,
+  soundEnabled: PropTypes.bool.isRequired,
 };
 
 export function ProjectLink({ children, className, project }) {

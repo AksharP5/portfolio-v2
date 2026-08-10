@@ -7,8 +7,14 @@ export default function Timeline() {
       <h2 className="experience-concept-title" id="experience-title">Work Experience</h2>
       <ol className="timeline-list">
         {experienceRecords.map((item) => (
-          <li key={`${item.role}-${item.company}`}>
-            <time><Period>{item.period}</Period></time>
+          <li
+            className={item.current ? "is-current" : "is-previous"}
+            key={`${item.role}-${item.company}`}
+          >
+            <div className="timeline-meta">
+              <time><Period>{item.period}</Period></time>
+              <span className="timeline-status">{item.current ? "Active" : "Previous"}</span>
+            </div>
             <div className="timeline-copy">
               <h3>{item.role}</h3>
               <p className="timeline-company">{item.company}</p>

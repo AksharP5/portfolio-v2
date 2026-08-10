@@ -9,8 +9,13 @@ function initialColorMode() {
   return window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
 }
 
+function initialSoundEnabled() {
+  return window.localStorage.getItem("portfolio-prototype-click-sound") !== "off";
+}
+
 export default function PrototypeGallery() {
   const [colorMode, setColorMode] = useState(initialColorMode);
+  const [soundEnabled, setSoundEnabled] = useState(initialSoundEnabled);
   const [showOpening, setShowOpening] = useState(
     () => !window.matchMedia("(prefers-reduced-motion: reduce)").matches,
   );
@@ -27,14 +32,23 @@ export default function PrototypeGallery() {
     return () => window.clearTimeout(timeout);
   }, [showOpening]);
 
+  useEffect(() => {
+    window.localStorage.setItem(
+      "portfolio-prototype-click-sound",
+      soundEnabled ? "on" : "off",
+    );
+  }, [soundEnabled]);
+
   return (
     <>
       <div id="stage" className="prototype-stage">
         <PortfolioPrototype
           colorMode={colorMode}
+          soundEnabled={soundEnabled}
           onToggleColorMode={() => {
             setColorMode((mode) => (mode === "dark" ? "light" : "dark"));
           }}
+          onToggleSound={() => setSoundEnabled((enabled) => !enabled)}
         />
         <div className="social-dock"><SocialMorph /></div>
       </div>

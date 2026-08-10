@@ -1,19 +1,32 @@
-import { useEffect, useLayoutEffect, useRef, useState } from "react";
+import PropTypes from "prop-types";
+import {
+  useCallback,
+  useEffect,
+  useLayoutEffect,
+  useRef,
+  useState,
+} from "react";
 import { createPortal } from "react-dom";
-import Baseline from "./Baseline";
-import Chapters from "./Chapters";
-import Disclosure from "./Disclosure";
-import Ledger from "./Ledger";
-import SplitView from "./SplitView";
+import Bars from "../feedback/Bars";
+import Echo from "../feedback/Echo";
+import Pulse from "../feedback/Pulse";
+import Snap from "../feedback/Snap";
+import {
+  playBarsSound,
+  playEchoSound,
+  playPulseSound,
+  playSnapSound,
+  playTileSound,
+} from "../feedback/sounds";
+import Tile from "../feedback/Tile";
 import Timeline from "./Timeline";
 
 const variants = [
-  { shortName: "Base", name: "Baseline", Component: Baseline },
-  { shortName: "Open", name: "Disclosure", Component: Disclosure },
-  { shortName: "Line", name: "Timeline", Component: Timeline },
-  { shortName: "Log", name: "Ledger", Component: Ledger },
-  { shortName: "Story", name: "Chapters", Component: Chapters },
-  { shortName: "Split", name: "Split view", Component: SplitView },
+  { shortName: "Dot", name: "Soft pulse", Effect: Pulse, playSound: playPulseSound },
+  { shortName: "Snap", name: "Corner snap", Effect: Snap, playSound: playSnapSound },
+  { shortName: "Echo", name: "Echo rings", Effect: Echo, playSound: playEchoSound },
+  { shortName: "Tile", name: "Tactile tile", Effect: Tile, playSound: playTileSound },
+  { shortName: "Bars", name: "Signal bars", Effect: Bars, playSound: playBarsSound },
 ];
 
 function initialVariant() {
@@ -21,41 +34,93 @@ function initialVariant() {
   return Number.isInteger(value) && value >= 1 && value <= variants.length ? value - 1 : 0;
 }
 
-export default function ExperienceExplorer() {
+export default function ExperienceExplorer({ soundEnabled }) {
   const [activeIndex, setActiveIndex] = useState(initialVariant);
+  const [feedback, setFeedback] = useState(null);
   const [ready, setReady] = useState(false);
-  const pickerRef = useRef(null);
+  const audioContextRef = useRef(null);
+  const clearFeedbackRef = useRef(null);
+  const feedbackIdRef = useRef(0);
   const highlightRef = useRef(null);
   const itemRefs = useRef([]);
-  const { Component } = variants[activeIndex];
+  const { Effect } = variants[activeIndex];
 
-  const selectVariant = (index) => {
+  const selectVariant = useCallback((index) => {
+    if (index < 0 || index >= variants.length) return;
+    window.clearTimeout(clearFeedbackRef.current);
     setActiveIndex(index);
+    setFeedback(null);
     const url = new URL(window.location.href);
     url.searchParams.set("v", String(index + 1));
     window.history.replaceState({}, "", url);
-  };
+  }, []);
+
+  const triggerFeedback = useCallback((x, y) => {
+    const variant = variants[activeIndex];
+    const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+    if (!reducedMotion) {
+      feedbackIdRef.current += 1;
+      setFeedback({ id: feedbackIdRef.current, x, y });
+      window.clearTimeout(clearFeedbackRef.current);
+      clearFeedbackRef.current = window.setTimeout(() => setFeedback(null), 650);
+    }
+
+    if (!soundEnabled) return;
+    const AudioContext = window.AudioContext ?? window.webkitAudioContext;
+    if (!AudioContext) return;
+
+    if (!audioContextRef.current) audioContextRef.current = new AudioContext();
+    const context = audioContextRef.current;
+    const play = () => variant.playSound(context);
+
+    if (context.state === "suspended") {
+      context.resume().then(play).catch((error) => {
+        console.warn("Click feedback audio could not start.", error);
+      });
+      return;
+    }
+
+    play();
+  }, [activeIndex, soundEnabled]);
 
   useLayoutEffect(() => {
     const updateHighlight = () => {
       const item = itemRefs.current[activeIndex];
       const highlight = highlightRef.current;
       if (!item || !highlight) return;
-      highlight.style.transform = `translateX(${item.offsetLeft}px)`;
       highlight.style.width = `${item.offsetWidth}px`;
+      highlight.style.transform = `translateX(${item.offsetLeft}px)`;
     };
 
     updateHighlight();
     window.addEventListener("resize", updateHighlight);
+    return () => window.removeEventListener("resize", updateHighlight);
+  }, [activeIndex]);
+
+  useEffect(() => {
+    let secondFrame = 0;
     const firstFrame = window.requestAnimationFrame(() => {
-      window.requestAnimationFrame(() => setReady(true));
+      secondFrame = window.requestAnimationFrame(() => setReady(true));
     });
 
     return () => {
-      window.removeEventListener("resize", updateHighlight);
       window.cancelAnimationFrame(firstFrame);
+      window.cancelAnimationFrame(secondFrame);
     };
-  }, [activeIndex]);
+  }, []);
+
+  useEffect(() => {
+    const handlePointerDown = (event) => {
+      if (event.button !== 0) return;
+      const target = event.target instanceof Element ? event.target : null;
+      if (target?.closest(".proto-picker, .prototype-sound-toggle")) return;
+      triggerFeedback(event.clientX, event.clientY);
+    };
+
+    document.addEventListener("pointerdown", handlePointerDown);
+    return () => document.removeEventListener("pointerdown", handlePointerDown);
+  }, [triggerFeedback]);
 
   useEffect(() => {
     const handleKeyDown = (event) => {
@@ -76,6 +141,12 @@ export default function ExperienceExplorer() {
         return;
       }
 
+      if (event.key === "r" || event.key === "R") {
+        event.preventDefault();
+        triggerFeedback(window.innerWidth / 2, window.innerHeight / 2);
+        return;
+      }
+
       if (event.key !== "ArrowLeft" && event.key !== "ArrowRight") return;
       event.preventDefault();
       const direction = event.key === "ArrowRight" ? 1 : -1;
@@ -84,26 +155,36 @@ export default function ExperienceExplorer() {
 
     window.addEventListener("keydown", handleKeyDown);
     return () => window.removeEventListener("keydown", handleKeyDown);
-  }, [activeIndex]);
+  }, [activeIndex, selectVariant, triggerFeedback]);
+
+  useEffect(() => () => {
+    window.clearTimeout(clearFeedbackRef.current);
+    const context = audioContextRef.current;
+    if (context && context.state !== "closed") void context.close();
+  }, []);
 
   return (
     <>
-      <Component key={activeIndex} />
+      <Timeline />
       {createPortal(
-        <div
-          ref={pickerRef}
+        <Effect key={feedback?.id ?? activeIndex} feedback={feedback} />,
+        document.body,
+      )}
+      {createPortal(
+        <nav
           className="proto-picker"
           data-position="top"
-          data-ready={ready ? "true" : "false"}
-          aria-label="Experience prototype picker"
+          data-ready={ready ? "" : undefined}
+          aria-label="Prototype variants"
         >
-          <span ref={highlightRef} className="proto-picker__highlight" aria-hidden="true" />
+          <span ref={highlightRef} className="proto-picker-highlight" aria-hidden="true" />
           {variants.map((variant, index) => (
             <button
               ref={(node) => { itemRefs.current[index] = node; }}
-              className="proto-picker__item"
+              className="proto-picker-item"
               type="button"
-              aria-pressed={activeIndex === index}
+              data-active={activeIndex === index ? "" : undefined}
+              aria-current={activeIndex === index ? "true" : undefined}
               aria-label={`${index + 1}. ${variant.name}`}
               title={`${index + 1}. ${variant.name}`}
               key={variant.name}
@@ -112,9 +193,22 @@ export default function ExperienceExplorer() {
               {variant.shortName}
             </button>
           ))}
-        </div>,
+          <span className="proto-picker-divider" aria-hidden="true" />
+          <button
+            className="proto-picker-item proto-picker-replay"
+            type="button"
+            aria-label="Replay animation (R)"
+            onClick={() => triggerFeedback(window.innerWidth / 2, window.innerHeight / 2)}
+          >
+            ↻
+          </button>
+        </nav>,
         document.body,
       )}
     </>
   );
 }
+
+ExperienceExplorer.propTypes = {
+  soundEnabled: PropTypes.bool.isRequired,
+};

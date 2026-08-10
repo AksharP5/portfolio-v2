@@ -40,7 +40,12 @@ SectionTitle.propTypes = {
   id: PropTypes.string.isRequired,
 };
 
-export default function PortfolioPrototype({ colorMode, onToggleColorMode }) {
+export default function PortfolioPrototype({
+  colorMode,
+  onToggleColorMode,
+  onToggleSound,
+  soundEnabled,
+}) {
   return (
     <div className="prototype-shell">
       <main id="home" className="prototype-page">
@@ -50,11 +55,16 @@ export default function PortfolioPrototype({ colorMode, onToggleColorMode }) {
               <h1>{profile.name}</h1>
               <p className="profile-role">Data Analyst at Dow Jones</p>
             </div>
-            <PrototypeTools colorMode={colorMode} onToggleColorMode={onToggleColorMode} />
+            <PrototypeTools
+              colorMode={colorMode}
+              onToggleColorMode={onToggleColorMode}
+              onToggleSound={onToggleSound}
+              soundEnabled={soundEnabled}
+            />
           </div>
         </header>
 
-        <ExperienceExplorer />
+        <ExperienceExplorer soundEnabled={soundEnabled} />
 
         <section id="projects" className="prototype-section" aria-labelledby="projects-title">
           <SectionTitle id="projects-title">My Projects</SectionTitle>
@@ -93,4 +103,6 @@ export default function PortfolioPrototype({ colorMode, onToggleColorMode }) {
 PortfolioPrototype.propTypes = {
   colorMode: PropTypes.oneOf(["light", "dark"]).isRequired,
   onToggleColorMode: PropTypes.func.isRequired,
+  onToggleSound: PropTypes.func.isRequired,
+  soundEnabled: PropTypes.bool.isRequired,
 };
