@@ -1,14 +1,18 @@
 import { useCallback, useEffect, useLayoutEffect, useRef, useState } from "react";
 import { profile } from "../../data";
 import { SocialMorph } from "../../social-preview";
-import Carbon from "./variants/Carbon";
+import Aqua from "./variants/Aqua";
+import Cobalt from "./variants/Cobalt";
+import Coral from "./variants/Coral";
+import Night from "./variants/Night";
+import Volt from "./variants/Volt";
 
 const variants = [
-  { name: "B&W", theme: "mono", component: Carbon },
-  { name: "Graphite", theme: "graphite", component: Carbon },
-  { name: "Navy", theme: "navy", component: Carbon },
-  { name: "Forest", theme: "forest", component: Carbon },
-  { name: "Plum", theme: "plum", component: Carbon },
+  { name: "Cobalt", theme: "cobalt", component: Cobalt },
+  { name: "Coral", theme: "coral", component: Coral },
+  { name: "Aqua", theme: "aqua", component: Aqua },
+  { name: "Night", theme: "night", component: Night },
+  { name: "Volt", theme: "volt", component: Volt },
 ];
 
 function initialVariant() {
@@ -28,6 +32,7 @@ export default function PrototypeGallery() {
   const [showOpening, setShowOpening] = useState(
     () => !window.matchMedia("(prefers-reduced-motion: reduce)").matches,
   );
+  const [replayKey, setReplayKey] = useState(0);
   const pickerRef = useRef(null);
   const highlightRef = useRef(null);
   const itemRefs = useRef([]);
@@ -47,7 +52,7 @@ export default function PrototypeGallery() {
 
   useEffect(() => {
     if (!showOpening) return undefined;
-    const timeout = window.setTimeout(() => setShowOpening(false), 1400);
+    const timeout = window.setTimeout(() => setShowOpening(false), 1100);
     return () => window.clearTimeout(timeout);
   }, [showOpening]);
 
@@ -61,11 +66,19 @@ export default function PrototypeGallery() {
 
   const select = useCallback((index) => {
     if (index < 0 || index >= variants.length) return;
-    window.scrollTo({ top: 0, behavior: "instant" });
+    window.scrollTo({ top: 0, behavior: "auto" });
     setActive(index);
+    setReplayKey((key) => key + 1);
     const url = new URL(window.location.href);
     url.searchParams.set("v", String(index + 1));
     window.history.replaceState(null, "", url);
+  }, []);
+
+  const replay = useCallback(() => {
+    setReplayKey((key) => key + 1);
+    if (!window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+      setShowOpening(true);
+    }
   }, []);
 
   useLayoutEffect(() => {
@@ -90,15 +103,16 @@ export default function PrototypeGallery() {
       if (number >= 1 && number <= variants.length) select(number - 1);
       else if (event.key === "ArrowRight") select((active + 1) % variants.length);
       else if (event.key === "ArrowLeft") select((active - 1 + variants.length) % variants.length);
+      else if (event.key === "r" || event.key === "R") replay();
     };
 
     document.addEventListener("keydown", onKeyDown);
     return () => document.removeEventListener("keydown", onKeyDown);
-  }, [active, select]);
+  }, [active, replay, select]);
 
   return (
     <>
-      <div id="stage" className={`prototype-stage theme-${variant.theme}`} key={active}>
+      <div id="stage" className={`prototype-stage theme-${variant.theme}`} key={`${active}-${replayKey}`}>
         <Variant
           colorMode={colorMode}
           onToggleColorMode={() => {
@@ -123,10 +137,20 @@ export default function PrototypeGallery() {
             {variant.name}
           </button>
         ))}
+        <span className="proto-picker-divider" aria-hidden="true"></span>
+        <button
+          className="proto-picker-item proto-picker-replay"
+          type="button"
+          aria-label="Replay animation (R)"
+          onClick={replay}
+        >
+          ↻
+        </button>
       </nav>
 
       {showOpening ? (
         <div
+          key={`opening-${active}-${replayKey}`}
           className={`prototype-opening theme-${variant.theme}`}
           aria-hidden="true"
           onAnimationEnd={() => setShowOpening(false)}

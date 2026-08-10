@@ -1,10 +1,8 @@
 import PropTypes from "prop-types";
 import {
-  FaArrowUpRightFromSquare,
   FaMoon,
   FaSun,
 } from "react-icons/fa6";
-import { profile } from "../../data";
 import { ViewCount } from "../../view-count";
 
 export function ThemeToggle({ colorMode, onToggle }) {
@@ -29,22 +27,16 @@ ThemeToggle.propTypes = {
   onToggle: PropTypes.func.isRequired,
 };
 
-export function PortfolioIdentity({ colorMode, onToggleColorMode }) {
+export function PrototypeTools({ colorMode, onToggleColorMode }) {
   return (
-    <div className="prototype-identity">
-      <div>
-        <h1 className="prototype-signature">{profile.name}</h1>
-        <p className="prototype-role">{profile.roles.join(" / ")}</p>
-      </div>
-      <div className="prototype-identity-tools">
-        <ViewCount className="prototype-view-count" />
-        <ThemeToggle colorMode={colorMode} onToggle={onToggleColorMode} />
-      </div>
+    <div className="prototype-tools">
+      <ViewCount className="prototype-view-count" />
+      <ThemeToggle colorMode={colorMode} onToggle={onToggleColorMode} />
     </div>
   );
 }
 
-PortfolioIdentity.propTypes = {
+PrototypeTools.propTypes = {
   colorMode: PropTypes.oneOf(["light", "dark"]).isRequired,
   onToggleColorMode: PropTypes.func.isRequired,
 };
@@ -67,10 +59,6 @@ export function ProjectLink({ children, className, project }) {
       aria-label={`${project.title}: ${destination}`}
     >
       <div className="project-link-content">{children}</div>
-      <span className="project-link-destination">
-        {destination}
-        <FaArrowUpRightFromSquare aria-hidden="true" />
-      </span>
     </a>
   );
 }
