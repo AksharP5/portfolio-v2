@@ -8,11 +8,11 @@ import Night from "./variants/Night";
 import Volt from "./variants/Volt";
 
 const variants = [
-  { name: "Cobalt", theme: "cobalt", component: Cobalt },
-  { name: "Coral", theme: "coral", component: Coral },
-  { name: "Aqua", theme: "aqua", component: Aqua },
-  { name: "Night", theme: "night", component: Night },
-  { name: "Volt", theme: "volt", component: Volt },
+  { name: "Profile", theme: "profile", component: Cobalt },
+  { name: "Terminal", theme: "terminal", component: Coral },
+  { name: "Scrapbook", theme: "scrapbook", component: Aqua },
+  { name: "Gallery", theme: "gallery", component: Night },
+  { name: "Resume", theme: "resume", component: Volt },
 ];
 
 function initialVariant() {

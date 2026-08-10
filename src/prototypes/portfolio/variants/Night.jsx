@@ -1,42 +1,45 @@
 import PropTypes from "prop-types";
-import portrait from "../../../assets/images/logo-portrait.webp";
+import workbench from "../../../assets/images/workbench.webp";
 import { experience, profile, projects, skills } from "../../../data";
 import { Period, ProjectLink, PrototypeTools } from "../content";
 
 export default function Night({ colorMode, onToggleColorMode }) {
   return (
-    <article className="prototype-page night-prototype">
-      <header className="night-hero">
+    <article className="prototype-page gallery-prototype">
+      <header className="gallery-hero">
         <div className="prototype-topline">
           <span>{profile.roles.join(" / ")}</span>
           <PrototypeTools colorMode={colorMode} onToggleColorMode={onToggleColorMode} />
         </div>
-        <div className="night-identity">
-          <img src={portrait} alt="Illustrated portrait of Akshar" />
-          <div>
-            <h1>{profile.name}</h1>
-            <p>{profile.intro}</p>
-          </div>
+        <div className="gallery-intro">
+          <h1>{profile.name}</h1>
+          <p>{profile.intro}</p>
         </div>
+        <img
+          src={workbench}
+          alt="A basketball, notebook, laptop, and headphones on a desk"
+        />
       </header>
 
       <main>
-        <section className="night-section" aria-labelledby="night-projects">
-          <h2 id="night-projects">Work</h2>
-          <div className="night-project-list">
+        <section className="gallery-section" aria-labelledby="gallery-projects">
+          <h2 id="gallery-projects">Work</h2>
+          <div className="gallery-project-list">
             {projects.map((project) => (
-              <ProjectLink className="night-project" key={project.id} project={project}>
+              <ProjectLink className="gallery-project" key={project.id} project={project}>
                 <h3>{project.title}</h3>
-                <p>{project.description}</p>
-                <span className="prototype-meta">{project.stack.join(" / ")}</span>
+                <div>
+                  <p>{project.description}</p>
+                  <span className="prototype-meta">{project.stack.join(" / ")}</span>
+                </div>
               </ProjectLink>
             ))}
           </div>
         </section>
 
-        <section className="night-section" aria-labelledby="night-experience">
-          <h2 id="night-experience">Experience</h2>
-          <div className="night-experience">
+        <section className="gallery-section" aria-labelledby="gallery-experience">
+          <h2 id="gallery-experience">Experience</h2>
+          <div className="gallery-experience">
             {experience.map((item) => (
               <article key={`${item.role}-${item.company}`}>
                 <div>
@@ -49,8 +52,8 @@ export default function Night({ colorMode, onToggleColorMode }) {
           </div>
         </section>
 
-        <section className="night-section night-skills" aria-labelledby="night-skills">
-          <h2 id="night-skills">Skills</h2>
+        <section className="gallery-section gallery-skills" aria-labelledby="gallery-skills">
+          <h2 id="gallery-skills">Skills</h2>
           <p>{skills.join(" / ")}</p>
         </section>
       </main>

@@ -1,4 +1,5 @@
 import PropTypes from "prop-types";
+import portrait from "../../../assets/images/logo-portrait.webp";
 import workbench from "../../../assets/images/workbench.webp";
 import { experience, profile, projects, skills } from "../../../data";
 import { Period, ProjectLink, PrototypeTools } from "../content";
@@ -8,35 +9,43 @@ export default function Aqua({ colorMode, onToggleColorMode }) {
   const index = projects.slice(2);
 
   return (
-    <article className="prototype-page aqua-prototype">
-      <header className="aqua-hero">
+    <article className="prototype-page scrapbook-prototype">
+      <header className="scrapbook-hero">
         <div className="prototype-topline">
-          <span>{profile.roles.join(" / ")}</span>
+          <span>Developer, analyst, builder</span>
           <PrototypeTools colorMode={colorMode} onToggleColorMode={onToggleColorMode} />
         </div>
-        <h1>{profile.name}</h1>
-        <p>{profile.intro}</p>
-        <img
-          src={workbench}
-          alt="A basketball, notebook, laptop, and headphones on a desk"
-        />
+
+        <div className="scrapbook-hero-grid">
+          <div>
+            <h1>{profile.name}</h1>
+            <p>{profile.intro}</p>
+          </div>
+          <figure>
+            <img
+              src={workbench}
+              alt="A basketball, notebook, laptop, and headphones on a desk"
+            />
+            <img className="scrapbook-portrait" src={portrait} alt="Illustrated portrait of Akshar" />
+          </figure>
+        </div>
       </header>
 
       <main>
-        <section className="aqua-section" aria-labelledby="aqua-projects">
-          <h2 id="aqua-projects">Projects</h2>
-          <div className="aqua-featured">
+        <section className="scrapbook-section" aria-labelledby="scrapbook-projects">
+          <h2 id="scrapbook-projects">Recent projects</h2>
+          <div className="scrapbook-featured">
             {featured.map((project) => (
-              <ProjectLink className="aqua-feature" key={project.id} project={project}>
+              <ProjectLink className="scrapbook-feature" key={project.id} project={project}>
+                <span className="prototype-meta">{project.stack.join(" / ")}</span>
                 <h3>{project.title}</h3>
                 <p>{project.description}</p>
-                <span className="prototype-meta">{project.stack.join(" / ")}</span>
               </ProjectLink>
             ))}
           </div>
-          <div className="aqua-project-index">
+          <div className="scrapbook-project-index">
             {index.map((project) => (
-              <ProjectLink className="aqua-project" key={project.id} project={project}>
+              <ProjectLink className="scrapbook-project" key={project.id} project={project}>
                 <div>
                   <h3>{project.title}</h3>
                   <span className="prototype-meta">{project.stack.join(" / ")}</span>
@@ -47,10 +56,10 @@ export default function Aqua({ colorMode, onToggleColorMode }) {
           </div>
         </section>
 
-        <section className="aqua-section aqua-bottom" aria-labelledby="aqua-experience">
+        <section className="scrapbook-section scrapbook-bottom" aria-labelledby="scrapbook-experience">
           <div>
-            <h2 id="aqua-experience">Experience</h2>
-            <div className="aqua-experience">
+            <h2 id="scrapbook-experience">Experience</h2>
+            <div className="scrapbook-experience">
               {experience.map((item) => (
                 <article key={`${item.role}-${item.company}`}>
                   <h3>{item.role}</h3>
@@ -60,8 +69,8 @@ export default function Aqua({ colorMode, onToggleColorMode }) {
               ))}
             </div>
           </div>
-          <div className="aqua-skills">
-            <h2>Skills</h2>
+          <div className="scrapbook-skills">
+            <h2>What I use</h2>
             <p>{skills.join(" / ")}</p>
           </div>
         </section>
