@@ -133,12 +133,25 @@ button:focus-visible {
 }
 
 .prototype-view-count {
+  display: inline-flex;
+  min-height: 30px;
+  align-items: center;
+  gap: 4px;
+  padding: 0 8px;
+  border: 1px solid var(--p-line);
+  border-radius: 3px;
+  background: var(--p-surface);
   color: var(--p-muted);
   font-family: var(--p-font-meta);
   font-size: 10px;
 }
 
 .prototype-view-count svg { width: 12px; height: 12px; }
+
+.prototype-view-count .view-count-number {
+  min-width: 0;
+  text-align: left;
+}
 
 .prototype-theme-toggle {
   display: grid;

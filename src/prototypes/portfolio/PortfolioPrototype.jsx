@@ -54,18 +54,6 @@ export default function PortfolioPrototype({ colorMode, onToggleColorMode }) {
           </div>
         </header>
 
-        <section id="skills" className="prototype-section" aria-labelledby="skills-title">
-          <SectionTitle id="skills-title">My Skills</SectionTitle>
-          <div className="skill-grid">
-            {skillIcons.map(([name, icon]) => (
-              <div className="skill-item" key={name}>
-                <img src={icon} alt="" />
-                <span>{name}</span>
-              </div>
-            ))}
-          </div>
-        </section>
-
         <section id="experience" className="prototype-section" aria-labelledby="experience-title">
           <SectionTitle id="experience-title">Work Experience</SectionTitle>
           <div className="experience-list">
@@ -96,6 +84,18 @@ export default function PortfolioPrototype({ colorMode, onToggleColorMode }) {
                   <span>{project.stack.join(", ")}</span>
                 </div>
               </ProjectLink>
+            ))}
+          </div>
+        </section>
+
+        <section id="skills" className="prototype-section" aria-labelledby="skills-title">
+          <SectionTitle id="skills-title">My Skills</SectionTitle>
+          <div className="skill-grid">
+            {skillIcons.map(([name, icon]) => (
+              <div className="skill-item" key={name}>
+                <img src={icon} alt="" />
+                <span>{name}</span>
+              </div>
             ))}
           </div>
         </section>
