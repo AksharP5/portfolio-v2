@@ -47,7 +47,6 @@ export default function PortfolioPrototype({ colorMode, onToggleColorMode }) {
           <div className="profile-heading">
             <div className="profile-heading-copy">
               <h1>{profile.name}</h1>
-              <a href={profile.github} target="_blank" rel="noreferrer">@AksharP5</a>
               <p className="profile-role">Data Analyst at Dow Jones</p>
             </div>
             <PrototypeTools colorMode={colorMode} onToggleColorMode={onToggleColorMode} />
