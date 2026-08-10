@@ -12,8 +12,9 @@ import pythonIcon from "../../assets/skills/py.png";
 import rabbitIcon from "../../assets/skills/rabbitmq-logo.png";
 import sqlIcon from "../../assets/skills/sql.png";
 import tsIcon from "../../assets/skills/tslogo.png";
-import { experience, profile, projects } from "../../data";
-import { Period, ProjectLink, PrototypeTools } from "./content";
+import { profile, projects } from "../../data";
+import { ProjectLink, PrototypeTools } from "./content";
+import ExperienceExplorer from "./experience/ExperienceExplorer";
 
 const skillIcons = [
   ["Python", pythonIcon],
@@ -53,21 +54,7 @@ export default function PortfolioPrototype({ colorMode, onToggleColorMode }) {
           </div>
         </header>
 
-        <section id="experience" className="prototype-section" aria-labelledby="experience-title">
-          <SectionTitle id="experience-title">Work Experience</SectionTitle>
-          <div className="experience-list">
-            {experience.map((item, index) => (
-              <article key={`${item.role}-${item.company}`}>
-                <span className="experience-index">{String(index + 1).padStart(2, "0")}</span>
-                <div>
-                  <h3>{item.role}</h3>
-                  <p>{item.company}</p>
-                </div>
-                <time><Period>{item.period}</Period></time>
-              </article>
-            ))}
-          </div>
-        </section>
+        <ExperienceExplorer />
 
         <section id="projects" className="prototype-section" aria-labelledby="projects-title">
           <SectionTitle id="projects-title">My Projects</SectionTitle>
