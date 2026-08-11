@@ -7,6 +7,7 @@ import {
   useState,
 } from "react";
 import { createPortal } from "react-dom";
+import { FaRotateRight } from "react-icons/fa6";
 import CoinLift from "../feedback/CoinLift";
 import Echo from "../feedback/Echo";
 import Flip from "../feedback/Flip";
@@ -37,7 +38,7 @@ function initialVariant() {
   return Number.isInteger(value) && value >= 1 && value <= variants.length ? value - 1 : 0;
 }
 
-export default function ExperienceExplorer({ soundEnabled }) {
+export default function ExperienceExplorer({ onReplayOpening, soundEnabled }) {
   const [activeIndex, setActiveIndex] = useState(initialVariant);
   const [feedback, setFeedback] = useState(null);
   const [ready, setReady] = useState(false);
@@ -146,7 +147,7 @@ export default function ExperienceExplorer({ soundEnabled }) {
 
       if (event.key === "r" || event.key === "R") {
         event.preventDefault();
-        triggerFeedback(window.innerWidth / 2, window.innerHeight / 2);
+        if (!event.repeat) onReplayOpening();
         return;
       }
 
@@ -158,7 +159,7 @@ export default function ExperienceExplorer({ soundEnabled }) {
 
     window.addEventListener("keydown", handleKeyDown);
     return () => window.removeEventListener("keydown", handleKeyDown);
-  }, [activeIndex, selectVariant, triggerFeedback]);
+  }, [activeIndex, onReplayOpening, selectVariant]);
 
   useEffect(() => () => {
     window.clearTimeout(clearFeedbackRef.current);
@@ -200,10 +201,11 @@ export default function ExperienceExplorer({ soundEnabled }) {
           <button
             className="proto-picker-item proto-picker-replay"
             type="button"
-            aria-label="Replay animation (R)"
-            onClick={() => triggerFeedback(window.innerWidth / 2, window.innerHeight / 2)}
+            aria-label="Replay opening animation (R)"
+            title="Replay opening animation (R)"
+            onClick={onReplayOpening}
           >
-            ↻
+            <FaRotateRight aria-hidden="true" />
           </button>
         </nav>,
         document.body,
@@ -213,5 +215,6 @@ export default function ExperienceExplorer({ soundEnabled }) {
 }
 
 ExperienceExplorer.propTypes = {
+  onReplayOpening: PropTypes.func.isRequired,
   soundEnabled: PropTypes.bool.isRequired,
 };

@@ -17,6 +17,7 @@ function initialSoundEnabled() {
 export default function PrototypeGallery() {
   const [colorMode, setColorMode] = useState(initialColorMode);
   const [soundEnabled, setSoundEnabled] = useState(initialSoundEnabled);
+  const [openingRun, setOpeningRun] = useState(0);
   const [showOpening, setShowOpening] = useState(
     () => !window.matchMedia("(prefers-reduced-motion: reduce)").matches,
   );
@@ -31,7 +32,7 @@ export default function PrototypeGallery() {
     if (!showOpening) return undefined;
     const fallback = window.setTimeout(() => setShowOpening(false), 2400);
     return () => window.clearTimeout(fallback);
-  }, [showOpening]);
+  }, [openingRun, showOpening]);
 
   useEffect(() => {
     window.localStorage.setItem(
@@ -41,6 +42,11 @@ export default function PrototypeGallery() {
   }, [soundEnabled]);
 
   const finishOpening = useCallback(() => setShowOpening(false), []);
+  const replayOpening = useCallback(() => {
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+    setOpeningRun((run) => run + 1);
+    setShowOpening(true);
+  }, []);
 
   return (
     <>
@@ -55,13 +61,18 @@ export default function PrototypeGallery() {
           onToggleColorMode={() => {
             setColorMode((mode) => (mode === "dark" ? "light" : "dark"));
           }}
+          onReplayOpening={replayOpening}
           onToggleSound={() => setSoundEnabled((enabled) => !enabled)}
         />
         <div className="social-dock"><SocialMorph /></div>
       </div>
 
       {showOpening ? (
-        <OpeningSequence name={profile.name} onComplete={finishOpening} />
+        <OpeningSequence
+          key={openingRun}
+          name={profile.name}
+          onComplete={finishOpening}
+        />
       ) : null}
     </>
   );

@@ -42,6 +42,7 @@ SectionTitle.propTypes = {
 
 export default function PortfolioPrototype({
   colorMode,
+  onReplayOpening,
   onToggleColorMode,
   onToggleSound,
   soundEnabled,
@@ -64,7 +65,10 @@ export default function PortfolioPrototype({
           </div>
         </header>
 
-        <ExperienceExplorer soundEnabled={soundEnabled} />
+        <ExperienceExplorer
+          onReplayOpening={onReplayOpening}
+          soundEnabled={soundEnabled}
+        />
 
         <section id="projects" className="prototype-section" aria-labelledby="projects-title">
           <SectionTitle id="projects-title">My Projects</SectionTitle>
@@ -102,6 +106,7 @@ export default function PortfolioPrototype({
 
 PortfolioPrototype.propTypes = {
   colorMode: PropTypes.oneOf(["light", "dark"]).isRequired,
+  onReplayOpening: PropTypes.func.isRequired,
   onToggleColorMode: PropTypes.func.isRequired,
   onToggleSound: PropTypes.func.isRequired,
   soundEnabled: PropTypes.bool.isRequired,
