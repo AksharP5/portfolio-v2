@@ -1,26 +1,77 @@
+import PropTypes from "prop-types";
+import { useId, useState } from "react";
+import { FaChevronDown } from "react-icons/fa6";
 import { Period } from "../content";
 import { experienceRecords } from "./data";
+
+const experienceItemProp = PropTypes.shape({
+  company: PropTypes.string.isRequired,
+  current: PropTypes.bool.isRequired,
+  period: PropTypes.string.isRequired,
+  role: PropTypes.string.isRequired,
+  summary: PropTypes.string.isRequired,
+});
+
+function TimelineItem({ defaultOpen, item }) {
+  const [open, setOpen] = useState(defaultOpen);
+  const disclosureId = useId();
+  const triggerId = `${disclosureId}-trigger`;
+  const panelId = `${disclosureId}-panel`;
+
+  return (
+    <li
+      className={item.current ? "is-current" : "is-previous"}
+      data-expanded={open ? "true" : "false"}
+    >
+      <button
+        id={triggerId}
+        className="timeline-summary"
+        type="button"
+        aria-controls={panelId}
+        aria-expanded={open}
+        onClick={() => setOpen((expanded) => !expanded)}
+      >
+        <span className="timeline-summary-copy">
+          <span className="timeline-role">{item.role}</span>
+          <span className="timeline-company">{item.company}</span>
+        </span>
+        <span className="timeline-summary-meta">
+          <time><Period>{item.period}</Period></time>
+          <span className="timeline-status">{item.current ? "Active" : "Previous"}</span>
+        </span>
+        <FaChevronDown className="timeline-chevron" aria-hidden="true" />
+      </button>
+
+      {open ? (
+        <div
+          id={panelId}
+          className="timeline-description"
+          role="region"
+          aria-labelledby={triggerId}
+        >
+          <p>{item.summary}</p>
+        </div>
+      ) : null}
+    </li>
+  );
+}
+
+TimelineItem.propTypes = {
+  defaultOpen: PropTypes.bool.isRequired,
+  item: experienceItemProp.isRequired,
+};
 
 export default function Timeline() {
   return (
     <section id="experience" className="prototype-section experience-timeline" aria-labelledby="experience-title">
       <h2 className="experience-concept-title" id="experience-title">Work Experience</h2>
       <ol className="timeline-list">
-        {experienceRecords.map((item) => (
-          <li
-            className={item.current ? "is-current" : "is-previous"}
+        {experienceRecords.map((item, index) => (
+          <TimelineItem
+            defaultOpen={index === 0}
+            item={item}
             key={`${item.role}-${item.company}`}
-          >
-            <div className="timeline-meta">
-              <time><Period>{item.period}</Period></time>
-              <span className="timeline-status">{item.current ? "Active" : "Previous"}</span>
-            </div>
-            <div className="timeline-copy">
-              <h3>{item.role}</h3>
-              <p className="timeline-company">{item.company}</p>
-              <p>{item.summary}</p>
-            </div>
-          </li>
+          />
         ))}
       </ol>
     </section>
