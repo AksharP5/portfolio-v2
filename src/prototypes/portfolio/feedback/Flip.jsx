@@ -1,11 +1,11 @@
 import { feedbackProp } from "./feedback-prop";
 
-export default function Pulse({ feedback }) {
+export default function Flip({ feedback }) {
   if (!feedback) return null;
 
   return (
     <div
-      className="click-feedback feedback-pulse"
+      className="click-feedback feedback-flip"
       style={{ left: `${feedback.x}px`, top: `${feedback.y}px` }}
       aria-hidden="true"
     >
@@ -14,4 +14,4 @@ export default function Pulse({ feedback }) {
   );
 }
 
-Pulse.propTypes = { feedback: feedbackProp };
+Flip.propTypes = { feedback: feedbackProp };

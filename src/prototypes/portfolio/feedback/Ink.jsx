@@ -1,11 +1,11 @@
 import { feedbackProp } from "./feedback-prop";
 
-export default function Tile({ feedback }) {
+export default function Ink({ feedback }) {
   if (!feedback) return null;
 
   return (
     <div
-      className="click-feedback feedback-tile"
+      className="click-feedback feedback-ink"
       style={{ left: `${feedback.x}px`, top: `${feedback.y}px` }}
       aria-hidden="true"
     >
@@ -14,4 +14,4 @@ export default function Tile({ feedback }) {
   );
 }
 
-Tile.propTypes = { feedback: feedbackProp };
+Ink.propTypes = { feedback: feedbackProp };

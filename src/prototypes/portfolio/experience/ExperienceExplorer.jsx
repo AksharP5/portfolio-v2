@@ -7,26 +7,29 @@ import {
   useState,
 } from "react";
 import { createPortal } from "react-dom";
-import Bars from "../feedback/Bars";
+import CoinLift from "../feedback/CoinLift";
 import Echo from "../feedback/Echo";
-import Pulse from "../feedback/Pulse";
-import Snap from "../feedback/Snap";
+import Flip from "../feedback/Flip";
+import Ink from "../feedback/Ink";
+import Pinpoint from "../feedback/Pinpoint";
 import {
-  playBarsSound,
+  playCoinLiftSound,
   playEchoSound,
-  playPulseSound,
-  playSnapSound,
-  playTileSound,
+  playFlipSound,
+  playInkSound,
+  playPinpointSound,
+  playTrailSound,
 } from "../feedback/sounds";
-import Tile from "../feedback/Tile";
+import Trail from "../feedback/Trail";
 import Timeline from "./Timeline";
 
 const variants = [
-  { shortName: "Dot", name: "Soft pulse", Effect: Pulse, playSound: playPulseSound },
-  { shortName: "Snap", name: "Corner snap", Effect: Snap, playSound: playSnapSound },
-  { shortName: "Echo", name: "Echo rings", Effect: Echo, playSound: playEchoSound },
-  { shortName: "Tile", name: "Tactile tile", Effect: Tile, playSound: playTileSound },
-  { shortName: "Bars", name: "Signal bars", Effect: Bars, playSound: playBarsSound },
+  { shortName: "E", name: "Echo", Effect: Echo, playSound: playEchoSound },
+  { shortName: "C", name: "Coin lift", Effect: CoinLift, playSound: playCoinLiftSound },
+  { shortName: "Pin", name: "Pinpoint", Effect: Pinpoint, playSound: playPinpointSound },
+  { shortName: "Flip", name: "Flip", Effect: Flip, playSound: playFlipSound },
+  { shortName: "Zip", name: "Trail", Effect: Trail, playSound: playTrailSound },
+  { shortName: "Ink", name: "Ink line", Effect: Ink, playSound: playInkSound },
 ];
 
 function initialVariant() {

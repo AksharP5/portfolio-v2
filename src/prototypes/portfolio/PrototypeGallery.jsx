@@ -1,6 +1,7 @@
-import { useEffect, useLayoutEffect, useState } from "react";
+import { useCallback, useEffect, useLayoutEffect, useState } from "react";
 import { profile } from "../../data";
 import { SocialMorph } from "../../social-preview";
+import OpeningSequence from "./OpeningSequence";
 import PortfolioPrototype from "./PortfolioPrototype";
 
 function initialColorMode() {
@@ -28,8 +29,8 @@ export default function PrototypeGallery() {
 
   useEffect(() => {
     if (!showOpening) return undefined;
-    const timeout = window.setTimeout(() => setShowOpening(false), 1200);
-    return () => window.clearTimeout(timeout);
+    const fallback = window.setTimeout(() => setShowOpening(false), 2400);
+    return () => window.clearTimeout(fallback);
   }, [showOpening]);
 
   useEffect(() => {
@@ -39,9 +40,15 @@ export default function PrototypeGallery() {
     );
   }, [soundEnabled]);
 
+  const finishOpening = useCallback(() => setShowOpening(false), []);
+
   return (
     <>
-      <div id="stage" className="prototype-stage">
+      <div
+        id="stage"
+        className="prototype-stage"
+        data-opening={showOpening ? "" : undefined}
+      >
         <PortfolioPrototype
           colorMode={colorMode}
           soundEnabled={soundEnabled}
@@ -54,13 +61,7 @@ export default function PrototypeGallery() {
       </div>
 
       {showOpening ? (
-        <div
-          className="prototype-opening"
-          aria-hidden="true"
-          onAnimationEnd={() => setShowOpening(false)}
-        >
-          <span>{profile.name}</span>
-        </div>
+        <OpeningSequence name={profile.name} onComplete={finishOpening} />
       ) : null}
     </>
   );
