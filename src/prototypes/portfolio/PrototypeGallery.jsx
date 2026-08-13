@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useLayoutEffect, useState } from "react";
 import { SocialMorph } from "../../social-preview";
+import { profile } from "../../data";
 import OpeningSequence from "./OpeningSequence";
 import PortfolioPrototype from "./PortfolioPrototype";
 
@@ -17,7 +18,7 @@ export default function PrototypeGallery() {
   const [colorMode, setColorMode] = useState(initialColorMode);
   const [soundEnabled, setSoundEnabled] = useState(initialSoundEnabled);
   const [openingRun, setOpeningRun] = useState(0);
-  const [openingEnabled] = useState(
+  const [showOpening, setShowOpening] = useState(
     () => !window.matchMedia("(prefers-reduced-motion: reduce)").matches,
   );
 
@@ -34,18 +35,21 @@ export default function PrototypeGallery() {
     );
   }, [soundEnabled]);
 
+  useEffect(() => {
+    if (!showOpening) return undefined;
+    const fallback = window.setTimeout(() => setShowOpening(false), 2400);
+    return () => window.clearTimeout(fallback);
+  }, [openingRun, showOpening]);
+
   const replayOpening = useCallback(() => {
     if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
     setOpeningRun((run) => run + 1);
+    setShowOpening(true);
   }, []);
 
   return (
     <>
-      <div
-        id="stage"
-        className="prototype-stage"
-        data-opening={openingEnabled ? "" : undefined}
-      >
+      <div id="stage" className="prototype-stage">
         <PortfolioPrototype
           colorMode={colorMode}
           soundEnabled={soundEnabled}
@@ -58,8 +62,12 @@ export default function PrototypeGallery() {
         <div className="social-dock"><SocialMorph /></div>
       </div>
 
-      {openingEnabled ? (
-        <OpeningSequence key={openingRun} />
+      {showOpening ? (
+        <OpeningSequence
+          key={openingRun}
+          name={profile.name}
+          onComplete={() => setShowOpening(false)}
+        />
       ) : null}
     </>
   );
