@@ -17,7 +17,7 @@ export default function PrototypeGallery() {
   const [colorMode, setColorMode] = useState(initialColorMode);
   const [soundEnabled, setSoundEnabled] = useState(initialSoundEnabled);
   const [openingRun, setOpeningRun] = useState(0);
-  const [showOpening, setShowOpening] = useState(
+  const [openingEnabled] = useState(
     () => !window.matchMedia("(prefers-reduced-motion: reduce)").matches,
   );
 
@@ -28,23 +28,15 @@ export default function PrototypeGallery() {
   }, [colorMode]);
 
   useEffect(() => {
-    if (!showOpening) return undefined;
-    const fallback = window.setTimeout(() => setShowOpening(false), 2400);
-    return () => window.clearTimeout(fallback);
-  }, [openingRun, showOpening]);
-
-  useEffect(() => {
     window.localStorage.setItem(
       "portfolio-prototype-click-sound",
       soundEnabled ? "on" : "off",
     );
   }, [soundEnabled]);
 
-  const finishOpening = useCallback(() => setShowOpening(false), []);
   const replayOpening = useCallback(() => {
     if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
     setOpeningRun((run) => run + 1);
-    setShowOpening(true);
   }, []);
 
   return (
@@ -52,7 +44,7 @@ export default function PrototypeGallery() {
       <div
         id="stage"
         className="prototype-stage"
-        data-opening={showOpening ? "" : undefined}
+        data-opening={openingEnabled ? "" : undefined}
       >
         <PortfolioPrototype
           colorMode={colorMode}
@@ -66,11 +58,8 @@ export default function PrototypeGallery() {
         <div className="social-dock"><SocialMorph /></div>
       </div>
 
-      {showOpening ? (
-        <OpeningSequence
-          key={openingRun}
-          onComplete={finishOpening}
-        />
+      {openingEnabled ? (
+        <OpeningSequence key={openingRun} />
       ) : null}
     </>
   );

@@ -136,18 +136,18 @@ button:focus-visible {
   0% {
     opacity: 0;
     transform:
-      translate(var(--opening-start-x), calc(var(--opening-start-y) + 18px))
+      translate3d(var(--opening-start-x), calc(var(--opening-start-y) + 18px), 0)
       scale(var(--opening-start-scale));
   }
   22%, 40% {
     opacity: 1;
     transform:
-      translate(var(--opening-start-x), var(--opening-start-y))
+      translate3d(var(--opening-start-x), var(--opening-start-y), 0)
       scale(var(--opening-start-scale));
   }
   84%, 100% {
     opacity: 1;
-    transform: none;
+    transform: translate3d(0, 0, 0) scale(1);
   }
 }
 
@@ -265,6 +265,7 @@ button:focus-visible {
   font-weight: 600;
   letter-spacing: -0.06em;
   line-height: 1;
+  transform: translate3d(0, 0, 0) scale(1);
 }
 
 .profile-role {

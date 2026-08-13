@@ -1,7 +1,6 @@
-import PropTypes from "prop-types";
 import { useLayoutEffect, useRef } from "react";
 
-export default function OpeningSequence({ onComplete }) {
+export default function OpeningSequence() {
   const overlayRef = useRef(null);
 
   useLayoutEffect(() => {
@@ -27,10 +26,7 @@ export default function OpeningSequence({ onComplete }) {
         const overlay = overlayRef.current;
         target = document.querySelector(".profile-heading h1");
 
-        if (!overlay || !target) {
-          onComplete();
-          return;
-        }
+        if (!overlay || !target) return;
 
         const targetRange = document.createRange();
         targetRange.selectNodeContents(target);
@@ -63,14 +59,6 @@ export default function OpeningSequence({ onComplete }) {
       });
     };
 
-    const handleAnimationEnd = (event) => {
-      if (event.target === target && event.animationName === "opening-name-land") {
-        onComplete();
-      }
-    };
-
-    document.addEventListener("animationend", handleAnimationEnd);
-
     const fontsReady = document.fonts?.ready;
     if (fontsReady) {
       fontsReady.then(measure, measure);
@@ -82,14 +70,9 @@ export default function OpeningSequence({ onComplete }) {
       cancelled = true;
       window.cancelAnimationFrame(firstFrame);
       window.cancelAnimationFrame(secondFrame);
-      document.removeEventListener("animationend", handleAnimationEnd);
       clearTarget();
     };
-  }, [onComplete]);
+  }, []);
 
   return <div ref={overlayRef} className="prototype-opening" aria-hidden="true" />;
 }
-
-OpeningSequence.propTypes = {
-  onComplete: PropTypes.func.isRequired,
-};
