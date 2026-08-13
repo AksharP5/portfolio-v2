@@ -24,8 +24,9 @@ export default function OpeningSequence({ name, onComplete }) {
         targetRange.selectNodeContents(target);
 
         const sourceRect = source.getBoundingClientRect();
-        const targetRect = targetRange.getBoundingClientRect();
-        const scale = targetRect.width / sourceRect.width;
+        const targetRect = target.getBoundingClientRect();
+        const targetTextRect = targetRange.getBoundingClientRect();
+        const scale = targetTextRect.width / sourceRect.width;
 
         source.style.left = `${sourceRect.left}px`;
         source.style.top = `${sourceRect.top}px`;
