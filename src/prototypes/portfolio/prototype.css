@@ -143,12 +143,8 @@ button:focus-visible {
 @keyframes opening-name-land {
   0% { opacity: 0; transform: translateY(18px); }
   22%, 40% { opacity: 1; transform: translate(0, 0) scale(1); }
-  84%, 98% {
+  84%, 100% {
     opacity: 1;
-    transform: translate(var(--opening-x), var(--opening-y)) scale(var(--opening-scale));
-  }
-  100% {
-    opacity: 0;
     transform: translate(var(--opening-x), var(--opening-y)) scale(var(--opening-scale));
   }
 }
