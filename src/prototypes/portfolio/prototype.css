@@ -99,9 +99,8 @@ button:focus-visible {
 .prototype-opening {
   position: fixed;
   inset: 0;
-  z-index: 2147483647;
+  z-index: 100;
   overflow: hidden;
-  color: var(--p-strong);
   pointer-events: none;
 }
 
@@ -116,22 +115,15 @@ button:focus-visible {
   animation: opening-surface-land 1100ms cubic-bezier(0.16, 1, 0.3, 1) both;
 }
 
-.prototype-opening-name {
-  position: fixed;
-  top: 50%;
-  left: 50%;
-  z-index: 1;
-  font-size: clamp(52px, 12vw, 128px);
-  font-weight: 600;
-  letter-spacing: -0.06em;
-  line-height: 1;
+.prototype-stage[data-opening] .profile-heading h1 {
+  position: relative;
+  z-index: 101;
   opacity: 0;
-  transform: translate(-50%, -50%);
   transform-origin: 0 0;
   will-change: transform, opacity;
 }
 
-.prototype-opening[data-ready] .prototype-opening-name {
+.prototype-stage[data-opening] .profile-heading h1[data-opening-ready] {
   animation: opening-name-land 1100ms cubic-bezier(0.16, 1, 0.3, 1) both;
 }
 
@@ -141,11 +133,21 @@ button:focus-visible {
 }
 
 @keyframes opening-name-land {
-  0% { opacity: 0; transform: translateY(18px); }
-  22%, 40% { opacity: 1; transform: translate(0, 0) scale(1); }
+  0% {
+    opacity: 0;
+    transform:
+      translate(var(--opening-start-x), calc(var(--opening-start-y) + 18px))
+      scale(var(--opening-start-scale));
+  }
+  22%, 40% {
+    opacity: 1;
+    transform:
+      translate(var(--opening-start-x), var(--opening-start-y))
+      scale(var(--opening-start-scale));
+  }
   84%, 100% {
     opacity: 1;
-    transform: translate(var(--opening-x), var(--opening-y)) scale(var(--opening-scale));
+    transform: none;
   }
 }
 
@@ -264,8 +266,6 @@ button:focus-visible {
   letter-spacing: -0.06em;
   line-height: 1;
 }
-
-.prototype-stage[data-opening] .profile-heading h1 { visibility: hidden; }
 
 .profile-role {
   margin-top: 14px !important;
@@ -884,9 +884,11 @@ button:focus-visible {
   .prototype-page > *,
   .prototype-opening,
   .prototype-opening::before,
-  .prototype-opening-name {
+  .prototype-stage[data-opening] .profile-heading h1 {
     animation: none;
   }
+
+  .prototype-stage[data-opening] .profile-heading h1 { opacity: 1; }
 
   .proto-picker[data-ready] .proto-picker-highlight { transition: none; }
   .project-card { transition: none; }

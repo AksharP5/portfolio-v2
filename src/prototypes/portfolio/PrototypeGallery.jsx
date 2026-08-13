@@ -1,5 +1,4 @@
 import { useCallback, useEffect, useLayoutEffect, useState } from "react";
-import { profile } from "../../data";
 import { SocialMorph } from "../../social-preview";
 import OpeningSequence from "./OpeningSequence";
 import PortfolioPrototype from "./PortfolioPrototype";
@@ -70,7 +69,6 @@ export default function PrototypeGallery() {
       {showOpening ? (
         <OpeningSequence
           key={openingRun}
-          name={profile.name}
           onComplete={finishOpening}
         />
       ) : null}

@@ -1,21 +1,33 @@
 import PropTypes from "prop-types";
-import { useLayoutEffect, useRef, useState } from "react";
+import { useLayoutEffect, useRef } from "react";
 
-export default function OpeningSequence({ name, onComplete }) {
-  const nameRef = useRef(null);
-  const [ready, setReady] = useState(false);
+export default function OpeningSequence({ onComplete }) {
+  const overlayRef = useRef(null);
 
   useLayoutEffect(() => {
     let cancelled = false;
     let firstFrame = 0;
     let secondFrame = 0;
+    let target;
+
+    const clearTarget = () => {
+      if (!target) return;
+      delete target.dataset.openingReady;
+      target.style.removeProperty("--opening-start-x");
+      target.style.removeProperty("--opening-start-y");
+      target.style.removeProperty("--opening-start-scale");
+    };
 
     const measure = () => {
-      firstFrame = window.requestAnimationFrame(() => {
-        const source = nameRef.current;
-        const target = document.querySelector(".profile-heading h1");
+      if (cancelled) return;
 
-        if (!source || !target) {
+      firstFrame = window.requestAnimationFrame(() => {
+        if (cancelled) return;
+
+        const overlay = overlayRef.current;
+        target = document.querySelector(".profile-heading h1");
+
+        if (!overlay || !target) {
           onComplete();
           return;
         }
@@ -23,29 +35,45 @@ export default function OpeningSequence({ name, onComplete }) {
         const targetRange = document.createRange();
         targetRange.selectNodeContents(target);
 
-        const sourceRect = source.getBoundingClientRect();
         const targetRect = target.getBoundingClientRect();
         const targetTextRect = targetRange.getBoundingClientRect();
-        const scale = targetTextRect.width / sourceRect.width;
+        const targetFontSize = Number.parseFloat(getComputedStyle(target).fontSize);
+        const openingFontSize = Math.min(128, Math.max(52, window.innerWidth * 0.12));
+        const scale = openingFontSize / targetFontSize;
+        const textOffsetX = targetTextRect.left - targetRect.left;
+        const startX = (
+          (document.documentElement.clientWidth - targetTextRect.width * scale) / 2
+          - targetRect.left
+          - textOffsetX * scale
+        );
+        const startY = (
+          (document.documentElement.clientHeight - targetRect.height * scale) / 2
+          - targetRect.top
+        );
 
-        source.style.left = `${sourceRect.left}px`;
-        source.style.top = `${sourceRect.top}px`;
-        source.style.transform = "none";
-        source.style.setProperty("--opening-x", `${targetRect.left - sourceRect.left}px`);
-        source.style.setProperty("--opening-y", `${targetRect.top - sourceRect.top}px`);
-        source.style.setProperty("--opening-scale", String(scale));
+        target.style.setProperty("--opening-start-x", `${startX}px`);
+        target.style.setProperty("--opening-start-y", `${startY}px`);
+        target.style.setProperty("--opening-start-scale", String(scale));
 
         secondFrame = window.requestAnimationFrame(() => {
-          if (!cancelled) setReady(true);
+          if (cancelled) return;
+          target.dataset.openingReady = "";
+          overlay.dataset.ready = "";
         });
       });
     };
 
+    const handleAnimationEnd = (event) => {
+      if (event.target === target && event.animationName === "opening-name-land") {
+        onComplete();
+      }
+    };
+
+    document.addEventListener("animationend", handleAnimationEnd);
+
     const fontsReady = document.fonts?.ready;
     if (fontsReady) {
-      fontsReady.then(() => {
-        if (!cancelled) measure();
-      });
+      fontsReady.then(measure, measure);
     } else {
       measure();
     }
@@ -54,27 +82,14 @@ export default function OpeningSequence({ name, onComplete }) {
       cancelled = true;
       window.cancelAnimationFrame(firstFrame);
       window.cancelAnimationFrame(secondFrame);
+      document.removeEventListener("animationend", handleAnimationEnd);
+      clearTarget();
     };
   }, [onComplete]);
 
-  return (
-    <div
-      className="prototype-opening"
-      data-ready={ready ? "" : undefined}
-      aria-hidden="true"
-    >
-      <span
-        ref={nameRef}
-        className="prototype-opening-name"
-        onAnimationEnd={onComplete}
-      >
-        {name}
-      </span>
-    </div>
-  );
+  return <div ref={overlayRef} className="prototype-opening" aria-hidden="true" />;
 }
 
 OpeningSequence.propTypes = {
-  name: PropTypes.string.isRequired,
   onComplete: PropTypes.func.isRequired,
 };
