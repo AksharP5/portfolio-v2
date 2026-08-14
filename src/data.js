@@ -7,6 +7,7 @@ export const profile = {
   github: "https://github.com/AksharP5",
   linkedin: "https://www.linkedin.com/in/akshar5/",
   x: "https://x.com/apunlisted",
+  email: "aksharpatel1233@gmail.com",
 };
 
 export const projects = [

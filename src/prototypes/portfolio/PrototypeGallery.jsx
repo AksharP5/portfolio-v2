@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useLayoutEffect, useState } from "react";
 import { SocialMorph } from "../../social-preview";
 import { profile } from "../../data";
+import ContactPage from "./ContactPage";
 import OpeningSequence from "./OpeningSequence";
 import PortfolioPrototype from "./PortfolioPrototype";
 
@@ -15,6 +16,7 @@ function initialSoundEnabled() {
 }
 
 export default function PrototypeGallery() {
+  const isContactPage = window.location.pathname.replace(/\/+$/, "") === "/prototypes/contact";
   const [colorMode, setColorMode] = useState(initialColorMode);
   const [soundEnabled, setSoundEnabled] = useState(initialSoundEnabled);
   const [openingRun, setOpeningRun] = useState(0);
@@ -47,15 +49,29 @@ export default function PrototypeGallery() {
     setShowOpening(true);
   }, []);
 
+  const toggleColorMode = () => {
+    setColorMode((mode) => (mode === "dark" ? "light" : "dark"));
+  };
+
+  if (isContactPage) {
+    return (
+      <div id="stage" className="prototype-stage">
+        <ContactPage
+          colorMode={colorMode}
+          onToggleColorMode={toggleColorMode}
+        />
+        <div className="social-dock"><SocialMorph resumeHref="/resume?from=prototype" /></div>
+      </div>
+    );
+  }
+
   return (
     <>
       <div id="stage" className="prototype-stage">
         <PortfolioPrototype
           colorMode={colorMode}
           soundEnabled={soundEnabled}
-          onToggleColorMode={() => {
-            setColorMode((mode) => (mode === "dark" ? "light" : "dark"));
-          }}
+          onToggleColorMode={toggleColorMode}
           onReplayOpening={replayOpening}
           onToggleSound={() => setSoundEnabled((enabled) => !enabled)}
         />

@@ -52,10 +52,7 @@ export default function PortfolioPrototype({
       <main id="home" className="prototype-page">
         <header className="profile-intro">
           <div className="profile-heading">
-            <div className="profile-heading-copy">
-              <h1>{profile.name}</h1>
-              <p className="profile-role">Data Analyst at Dow Jones</p>
-            </div>
+            <h1>{profile.name}</h1>
             <PrototypeTools
               colorMode={colorMode}
               onToggleColorMode={onToggleColorMode}
@@ -99,6 +96,17 @@ export default function PortfolioPrototype({
             ))}
           </div>
         </section>
+
+        <aside className="contact-invite" aria-label="Contact">
+          <div>
+            <strong>Have something in mind?</strong>
+            <span>I&apos;m always open to a good conversation.</span>
+          </div>
+          <a href="/prototypes/contact/">
+            Let&apos;s talk
+            <FaArrowUpRightFromSquare aria-hidden="true" />
+          </a>
+        </aside>
       </main>
     </div>
   );
