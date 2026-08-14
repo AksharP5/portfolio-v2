@@ -660,12 +660,11 @@ button:focus-visible {
   font-weight: 600;
 }
 
-.contact-invite span {
+.contact-invite > div > span {
   color: var(--p-muted);
   font-size: 10.5px;
 }
 
-.contact-invite > a,
 .contact-form button {
   display: inline-flex;
   min-height: 38px;
@@ -683,14 +682,69 @@ button:focus-visible {
   transition: opacity 140ms ease-out, transform 140ms ease-out;
 }
 
-.contact-invite > a:hover,
 .contact-form button:hover { opacity: 0.82; }
 
-.contact-invite > a svg,
 .contact-form button svg {
   width: 10px;
   height: 10px;
 }
+
+.contact-cta {
+  display: grid;
+  min-width: 134px;
+  height: 42px;
+  grid-template-columns: 1fr 40px;
+  overflow: hidden;
+  border: 1px solid var(--p-line-strong);
+  border-radius: 3px;
+  background: var(--p-surface);
+  color: var(--p-strong);
+  font-family: var(--p-font-meta);
+  font-size: 10px;
+  font-weight: 500;
+  text-decoration: none;
+  transition: border-color 160ms ease-out, background 160ms ease-out, color 160ms ease-out;
+}
+
+.contact-cta > span:first-child {
+  display: flex;
+  align-items: center;
+  padding: 0 14px;
+}
+
+.contact-cta-arrow {
+  display: grid;
+  place-items: center;
+  border-left: 1px solid var(--p-line-strong);
+  color: var(--p-muted);
+  transition: border-color 160ms ease-out, color 160ms ease-out;
+}
+
+.contact-cta-arrow svg {
+  width: 10px;
+  height: 10px;
+  transition: transform 180ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.contact-cta:hover,
+.contact-cta:focus-visible {
+  border-color: var(--p-strong);
+  background: var(--p-strong);
+  color: var(--p-bg);
+}
+
+.contact-cta:hover .contact-cta-arrow,
+.contact-cta:focus-visible .contact-cta-arrow {
+  border-color: var(--p-bg);
+  color: var(--p-bg);
+}
+
+.contact-cta:hover .contact-cta-arrow svg,
+.contact-cta:focus-visible .contact-cta-arrow svg {
+  transform: translateX(3px);
+}
+
+.contact-cta:active { transform: translateY(1px); }
 
 .contact-shell {
   width: min(calc(100% - 36px), 620px);
@@ -885,7 +939,7 @@ button:focus-visible {
     flex-direction: column;
     gap: 17px;
   }
-  .contact-invite > a { width: 100%; }
+  .contact-cta { width: 100%; }
   .contact-page { padding-top: 28px; }
   .contact-intro { margin-top: 68px; }
   .contact-form { margin-top: 42px; }
@@ -907,7 +961,9 @@ button:focus-visible {
   }
 
   .project-card,
-  .contact-invite > a,
+  .contact-cta,
+  .contact-cta-arrow,
+  .contact-cta-arrow svg,
   .contact-form button,
   .skill-item,
   .skill-item img { transition: none; }

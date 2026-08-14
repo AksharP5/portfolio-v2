@@ -1,5 +1,5 @@
 import PropTypes from "prop-types";
-import { FaArrowUpRightFromSquare } from "react-icons/fa6";
+import { FaArrowRightLong, FaArrowUpRightFromSquare } from "react-icons/fa6";
 import aemIcon from "../../assets/skills/aem-design.png";
 import dockerIcon from "../../assets/skills/docker.png";
 import flaskIcon from "../../assets/skills/flask.png";
@@ -102,9 +102,11 @@ export default function PortfolioPrototype({
             <strong>Have something in mind?</strong>
             <span>I&apos;m always open to a good conversation.</span>
           </div>
-          <a href="/prototypes/contact/">
-            Let&apos;s talk
-            <FaArrowUpRightFromSquare aria-hidden="true" />
+          <a className="contact-cta" href="/prototypes/contact/">
+            <span>Let&apos;s talk</span>
+            <span className="contact-cta-arrow">
+              <FaArrowRightLong aria-hidden="true" />
+            </span>
           </a>
         </aside>
       </main>
