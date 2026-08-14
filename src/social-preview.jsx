@@ -1,5 +1,10 @@
 import { useLayoutEffect, useRef, useState } from "react";
-import { FaGithub, FaLinkedin, FaXTwitter } from "react-icons/fa6";
+import {
+  FaFileLines,
+  FaGithub,
+  FaLinkedin,
+  FaXTwitter,
+} from "react-icons/fa6";
 import { experience, profile, projects, skills } from "./data";
 import { ViewCount } from "./view-count";
 
@@ -26,6 +31,7 @@ const githubAvatar = "https://avatars.githubusercontent.com/u/123344143?v=4";
 const linkedinAvatar = "https://media.licdn.com/dms/image/v2/D4E03AQEp_I-iyCnXIQ/profile-displayphoto-shrink_800_800/B4EZZUVLsfH0Ac-/0/1745171563114?e=1787788800&v=beta&t=WPsdo3Et2D-7Y1sD6sTZcvN-Wx8yu_ksDWZAQ-KpGz8";
 const xAvatar = "https://pbs.twimg.com/profile_images/2075753792411226112/nnfp9G-b_400x400.jpg";
 const socialCardSize = { width: 360, height: 150 };
+const resumeCardSize = { width: 250, height: 323 };
 
 function GithubPreview() {
   return (
@@ -103,6 +109,17 @@ function XPreview() {
   );
 }
 
+function ResumePreview() {
+  return (
+    <div className="profile-card resume-card">
+      <img
+        src="/resume/Akshar-Patel-Resume-preview.webp"
+        alt=""
+      />
+    </div>
+  );
+}
+
 const socials = [
   {
     id: "github",
@@ -110,6 +127,7 @@ const socials = [
     href: profile.github,
     icon: FaGithub,
     render: GithubPreview,
+    size: socialCardSize,
   },
   {
     id: "linkedin",
@@ -117,6 +135,7 @@ const socials = [
     href: profile.linkedin,
     icon: FaLinkedin,
     render: LinkedinPreview,
+    size: socialCardSize,
   },
   {
     id: "x",
@@ -124,6 +143,15 @@ const socials = [
     href: profile.x,
     icon: FaXTwitter,
     render: XPreview,
+    size: socialCardSize,
+  },
+  {
+    id: "resume",
+    label: "Resume",
+    href: "/resume",
+    icon: FaFileLines,
+    render: ResumePreview,
+    size: resumeCardSize,
   },
 ];
 
@@ -138,7 +166,8 @@ export function SocialMorph() {
   const contentRef = useRef(null);
   const triggerRefs = useRef([]);
   const social = socials[active];
-  const panelWidth = Math.min(socialCardSize.width, Math.max(288, viewportWidth - 24));
+  const panelWidth = Math.min(social.size.width, Math.max(240, viewportWidth - 24));
+  const panelHeight = social.size.height * (panelWidth / social.size.width);
 
   const select = (index, animate) => {
     setOpen(true);
@@ -212,7 +241,7 @@ export function SocialMorph() {
     >
       <nav
         className="social-morph-triggers"
-        aria-label="Social profiles"
+        aria-label="Portfolio links"
         onPointerLeave={(event) => {
           if (event.pointerType === "mouse") setOpen(false);
         }}
@@ -224,8 +253,8 @@ export function SocialMorph() {
               ref={(node) => { triggerRefs.current[index] = node; }}
               key={item.id}
               href={item.href}
-              target="_blank"
-              rel="noreferrer"
+              target={item.href.startsWith("http") ? "_blank" : undefined}
+              rel={item.href.startsWith("http") ? "noreferrer" : undefined}
               aria-label={item.label}
               aria-current={active === index ? "true" : undefined}
               onPointerEnter={(event) => {
@@ -245,7 +274,7 @@ export function SocialMorph() {
         className="social-morph-panel"
         style={{
           "--panel-width": `${panelWidth}px`,
-          "--panel-height": `${socialCardSize.height}px`,
+          "--panel-height": `${panelHeight}px`,
           transform: `translate3d(${panelX}px, 0, 0)`,
         }}
         aria-live="polite"
@@ -256,11 +285,11 @@ export function SocialMorph() {
             ref={contentRef}
             key={social.id}
             className="social-morph-content"
-            style={{ width: panelWidth, height: socialCardSize.height }}
+            style={{ width: panelWidth, height: panelHeight }}
             href={social.href}
-            target="_blank"
-            rel="noreferrer"
-            aria-label={`Open ${social.label} profile`}
+            target={social.href.startsWith("http") ? "_blank" : undefined}
+            rel={social.href.startsWith("http") ? "noreferrer" : undefined}
+            aria-label={social.id === "resume" ? "View resume" : `Open ${social.label} profile`}
             tabIndex={open ? 0 : -1}
           >
             <Preview />

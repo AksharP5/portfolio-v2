@@ -11,6 +11,22 @@ export const profile = {
 
 export const projects = [
   {
+    id: "opencode",
+    title: "OpenCode",
+    stack: ["TypeScript"],
+    description:
+      "Contributed usability improvements across provider connection, help, status, and dialog workflows in an open-source AI coding agent.",
+    source: "https://github.com/anomalyco/opencode",
+  },
+  {
+    id: "blippy",
+    title: "blippy",
+    stack: ["Rust", "SQLite", "GitHub API"],
+    description:
+      "Built a keyboard-first TUI for GitHub issues and pull requests with review threads, diff views, and local SQLite-backed sync.",
+    source: "https://github.com/AksharP5/blippy",
+  },
+  {
     id: "patchline",
     title: "Patchline",
     stack: ["Go", "JavaScript"],
@@ -39,9 +55,9 @@ export const projects = [
   {
     id: "bear-necessities-market",
     title: "Bear Necessities Market",
-    stack: ["JavaScript", "Vue.js", "Docker", "RabbitMQ"],
+    stack: ["JavaScript", "Vue.js", "Docker", "RabbitMQ", "MongoDB"],
     description:
-      "Contributed to open-source software used by a food pantry to manage inventory, anonymous visits, and usage reports.",
+      "Built reporting APIs and RabbitMQ data pipelines for open-source food-pantry software spanning inventory, anonymous visits, and usage reports.",
     source: "https://gitlab.com/LibreFoodPantry/client-solutions/bear-necessities-market",
   },
   {
@@ -49,7 +65,7 @@ export const projects = [
     title: "ourPLCC",
     stack: ["Python", "Java", "Docker", "Git"],
     description:
-      "Expanded a Programming Languages Compiler Compiler that generates Python and Java code from grammar definitions.",
+      "Implemented LL(1) grammar validation and Paull's algorithm for a compiler toolkit used to teach programming-language concepts.",
     source: "https://github.com/ourPLCC",
   },
   {
@@ -71,10 +87,10 @@ export const projects = [
 ];
 
 export const experience = [
-  { role: "Data Analyst", company: "Dow Jones", period: "2025 — Present" },
-  { role: "Desktop Support Assistant", company: "Western New England University", period: "2023 — Present" },
-  { role: "Peer Tutor", company: "Western New England University", period: "2023 — 2024" },
-  { role: "B.S. Computer Science", company: "Western New England University", period: "2021 — 2025" },
+  { role: "Data Analyst", company: "Dow Jones", period: "July 2025 - Present" },
+  { role: "Desktop Support Assistant", company: "Western New England University", period: "2023 - 2025" },
+  { role: "Peer Tutor", company: "Western New England University", period: "2023 - 2024" },
+  { role: "B.S. Computer Science", company: "Western New England University", period: "August 2021 - May 2025" },
 ];
 
 export const skills = [
@@ -83,11 +99,26 @@ export const skills = [
   "JavaScript",
   "TypeScript",
   "Go",
+  "Rust",
+  "Swift",
   "HTML/CSS",
+  "React",
+  "Vue",
+  "Pandas",
+  "Matplotlib",
   "Docker",
   "Flask",
   "RabbitMQ",
+  "MongoDB",
   "SQL",
+  "dbt",
+  "Snowflake",
+  "AWS",
+  "BigQuery",
+  "GCP Vertex AI",
+  "Looker Studio",
+  "Power BI",
+  "Tableau",
   "Git",
   "Adobe Experience Manager",
 ];
