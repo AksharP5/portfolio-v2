@@ -59,7 +59,7 @@ export default function PrototypeGallery() {
           onReplayOpening={replayOpening}
           onToggleSound={() => setSoundEnabled((enabled) => !enabled)}
         />
-        <div className="social-dock"><SocialMorph /></div>
+        <div className="social-dock"><SocialMorph resumeHref="/resume?from=prototype" /></div>
       </div>
 
       {showOpening ? (

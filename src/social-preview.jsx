@@ -1,4 +1,5 @@
 import { useLayoutEffect, useRef, useState } from "react";
+import PropTypes from "prop-types";
 import {
   FaFileLines,
   FaGithub,
@@ -155,7 +156,7 @@ const socials = [
   },
 ];
 
-export function SocialMorph() {
+export function SocialMorph({ resumeHref = "/resume" }) {
   const [active, setActive] = useState(0);
   const [open, setOpen] = useState(false);
   const [panelX, setPanelX] = useState(0);
@@ -166,6 +167,7 @@ export function SocialMorph() {
   const contentRef = useRef(null);
   const triggerRefs = useRef([]);
   const social = socials[active];
+  const activeHref = social.id === "resume" ? resumeHref : social.href;
   const panelWidth = Math.min(social.size.width, Math.max(240, viewportWidth - 24));
   const panelHeight = social.size.height * (panelWidth / social.size.width);
 
@@ -248,13 +250,14 @@ export function SocialMorph() {
       >
         {socials.map((item, index) => {
           const Icon = item.icon;
+          const href = item.id === "resume" ? resumeHref : item.href;
           return (
             <a
               ref={(node) => { triggerRefs.current[index] = node; }}
               key={item.id}
-              href={item.href}
-              target={item.href.startsWith("http") ? "_blank" : undefined}
-              rel={item.href.startsWith("http") ? "noreferrer" : undefined}
+              href={href}
+              target={href.startsWith("http") ? "_blank" : undefined}
+              rel={href.startsWith("http") ? "noreferrer" : undefined}
               aria-label={item.label}
               aria-current={active === index ? "true" : undefined}
               onPointerEnter={(event) => {
@@ -286,9 +289,9 @@ export function SocialMorph() {
             key={social.id}
             className="social-morph-content"
             style={{ width: panelWidth, height: panelHeight }}
-            href={social.href}
-            target={social.href.startsWith("http") ? "_blank" : undefined}
-            rel={social.href.startsWith("http") ? "noreferrer" : undefined}
+            href={activeHref}
+            target={activeHref.startsWith("http") ? "_blank" : undefined}
+            rel={activeHref.startsWith("http") ? "noreferrer" : undefined}
             aria-label={social.id === "resume" ? "View resume" : `Open ${social.label} profile`}
             tabIndex={open ? 0 : -1}
           >
@@ -299,6 +302,10 @@ export function SocialMorph() {
     </div>
   );
 }
+
+SocialMorph.propTypes = {
+  resumeHref: PropTypes.string,
+};
 
 export function SocialDocument() {
   const sections = [

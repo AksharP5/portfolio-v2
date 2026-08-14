@@ -12,6 +12,9 @@ function getColorMode() {
 
 export default function ResumePage() {
   const colorMode = getColorMode();
+  const backHref = new URLSearchParams(window.location.search).get("from") === "prototype"
+    ? "/prototypes/"
+    : "/";
 
   useLayoutEffect(() => {
     const previousTitle = document.title;
@@ -27,7 +30,7 @@ export default function ResumePage() {
   return (
     <main className="resume-page">
       <header className="resume-toolbar">
-        <a className="resume-back" href="/">
+        <a className="resume-back" href={backHref}>
           <FaArrowLeft aria-hidden="true" />
           <span>Portfolio</span>
         </a>
