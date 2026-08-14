@@ -7,10 +7,33 @@ import { experienceRecords } from "./data";
 const experienceItemProp = PropTypes.shape({
   company: PropTypes.string.isRequired,
   current: PropTypes.bool.isRequired,
-  details: PropTypes.arrayOf(PropTypes.string.isRequired).isRequired,
+  details: PropTypes.arrayOf(PropTypes.shape({
+    emphasis: PropTypes.arrayOf(PropTypes.string.isRequired).isRequired,
+    text: PropTypes.string.isRequired,
+  }).isRequired).isRequired,
   period: PropTypes.string.isRequired,
   role: PropTypes.string.isRequired,
 });
+
+function DetailText({ detail }) {
+  if (detail.emphasis.length === 0) return detail.text;
+
+  const emphasis = new Set(detail.emphasis);
+  const pattern = detail.emphasis
+    .map((phrase) => phrase.replace(/[.*+?^${}()|[\]\\]/g, "\\$&"))
+    .join("|");
+
+  return detail.text.split(new RegExp(`(${pattern})`, "g")).map((part, index) => (
+    emphasis.has(part) ? <strong key={`${part}-${index}`}>{part}</strong> : part
+  ));
+}
+
+DetailText.propTypes = {
+  detail: PropTypes.shape({
+    emphasis: PropTypes.arrayOf(PropTypes.string.isRequired).isRequired,
+    text: PropTypes.string.isRequired,
+  }).isRequired,
+};
 
 function TimelineItem({ defaultOpen, item }) {
   const [open, setOpen] = useState(defaultOpen);
@@ -50,7 +73,9 @@ function TimelineItem({ defaultOpen, item }) {
           aria-labelledby={triggerId}
         >
           <ul className="timeline-bullets">
-            {item.details.map((detail) => <li key={detail}>{detail}</li>)}
+            {item.details.map((detail) => (
+              <li key={detail.text}><DetailText detail={detail} /></li>
+            ))}
           </ul>
         </div>
       ) : null}

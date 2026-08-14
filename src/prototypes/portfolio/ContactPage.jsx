@@ -56,18 +56,21 @@ export default function ContactPage({ colorMode, onToggleColorMode }) {
   };
 
   return (
-    <div className="contact-shell">
-      <main className="contact-page">
-        <header className="contact-navigation">
-          <a className="contact-back" href="/prototypes/">
-            <FaArrowLeft aria-hidden="true" />
-            Portfolio
-          </a>
-          <ThemeToggle colorMode={colorMode} onToggle={onToggleColorMode} />
-        </header>
+    <div className="contact-page">
+      <header className="contact-navigation">
+        <a className="contact-back" href="/prototypes/">
+          <FaArrowLeft aria-hidden="true" />
+          <span>Portfolio</span>
+        </a>
+        <div className="contact-navigation-title">
+          <strong>Akshar</strong>
+          <span>Contact</span>
+        </div>
+        <ThemeToggle colorMode={colorMode} onToggle={onToggleColorMode} />
+      </header>
 
+      <main className="contact-shell">
         <section className="contact-intro" aria-labelledby="contact-title">
-          <p>Contact</p>
           <h1 id="contact-title">Let&apos;s talk.</h1>
           <p>
             Have a role, project, or idea in mind? Send me a note and I&apos;ll get
@@ -119,8 +122,10 @@ export default function ContactPage({ colorMode, onToggleColorMode }) {
               disabled={status === "submitting" || status === "success"}
               aria-describedby="contact-form-status"
             >
-              {submitLabels[status]}
-              <SubmitIcon aria-hidden="true" />
+              <span>{submitLabels[status]}</span>
+              <span className="contact-submit-icon">
+                <SubmitIcon aria-hidden="true" />
+              </span>
             </button>
           </div>
         </form>
