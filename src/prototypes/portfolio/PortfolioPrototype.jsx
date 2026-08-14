@@ -1,4 +1,5 @@
 import PropTypes from "prop-types";
+import { useState } from "react";
 import { FaArrowRightLong, FaArrowUpRightFromSquare } from "react-icons/fa6";
 import aemIcon from "../../assets/skills/aem-design.png";
 import dockerIcon from "../../assets/skills/docker.png";
@@ -47,6 +48,10 @@ export default function PortfolioPrototype({
   onToggleSound,
   soundEnabled,
 }) {
+  const [activeProjectId, setActiveProjectId] = useState(projects[0].id);
+  const activeProject = projects.find((project) => project.id === activeProjectId)
+    ?? projects[0];
+
   return (
     <div className="prototype-shell">
       <main id="home" className="prototype-page">
@@ -69,19 +74,53 @@ export default function PortfolioPrototype({
 
         <section id="projects" className="prototype-section" aria-labelledby="projects-title">
           <SectionTitle id="projects-title">My Projects</SectionTitle>
-          <div className="project-list">
-            {projects.map((project) => (
-              <ProjectLink className="project-card" key={project.id} project={project}>
-                <div className="project-copy">
-                  <div className="project-title-row">
-                    <h3>{project.title}</h3>
+          <div className="project-browser">
+            <ol className="project-list">
+              {projects.map((project) => (
+                <li
+                  data-active={project.id === activeProjectId ? "true" : "false"}
+                  key={project.id}
+                >
+                  <ProjectLink
+                    className="project-row"
+                    project={project}
+                    onFocus={() => setActiveProjectId(project.id)}
+                    onPointerEnter={() => setActiveProjectId(project.id)}
+                  >
+                    <div className="project-row-copy">
+                      <div className="project-title-row">
+                        <h3>{project.title}</h3>
+                        <span>{project.stack.slice(0, 2).join(" / ")}</span>
+                      </div>
+                      <p>{project.description}</p>
+                    </div>
                     <FaArrowUpRightFromSquare aria-hidden="true" />
-                  </div>
-                  <p>{project.description}</p>
-                  <span>{project.stack.join(", ")}</span>
-                </div>
-              </ProjectLink>
-            ))}
+                  </ProjectLink>
+                </li>
+              ))}
+            </ol>
+
+            <figure className="project-preview" aria-hidden="true">
+              <div className="project-preview-frame">
+                {projects.map((project, index) => (
+                  <img
+                    className={project.id === activeProjectId ? "is-active" : undefined}
+                    src={`/projects/${project.id}.webp`}
+                    alt=""
+                    loading={index === 0 ? "eager" : "lazy"}
+                    key={project.id}
+                  />
+                ))}
+              </div>
+              <figcaption>
+                <span>{activeProject.title}</span>
+                <span>
+                  {activeProject.detail
+                    ? "Project notes"
+                    : activeProject.demo ? "Live demo" : "Repository"}
+                </span>
+              </figcaption>
+            </figure>
           </div>
         </section>
 

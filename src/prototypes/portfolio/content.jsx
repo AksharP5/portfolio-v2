@@ -74,7 +74,7 @@ PrototypeTools.propTypes = {
   soundEnabled: PropTypes.bool.isRequired,
 };
 
-export function ProjectLink({ children, className, project }) {
+export function ProjectLink({ children, className, onFocus, onPointerEnter, project }) {
   const href = project.detail ?? project.demo ?? project.source;
   const destination = project.detail
     ? "Project notes"
@@ -90,6 +90,8 @@ export function ProjectLink({ children, className, project }) {
       target={isExternal ? "_blank" : undefined}
       rel={isExternal ? "noreferrer" : undefined}
       aria-label={`${project.title}: ${destination}`}
+      onFocus={onFocus}
+      onPointerEnter={onPointerEnter}
     >
       <div className="project-link-content">{children}</div>
     </a>
@@ -99,12 +101,19 @@ export function ProjectLink({ children, className, project }) {
 ProjectLink.propTypes = {
   children: PropTypes.node.isRequired,
   className: PropTypes.string.isRequired,
+  onFocus: PropTypes.func,
+  onPointerEnter: PropTypes.func,
   project: PropTypes.shape({
     detail: PropTypes.string,
     demo: PropTypes.string,
     source: PropTypes.string.isRequired,
     title: PropTypes.string.isRequired,
   }).isRequired,
+};
+
+ProjectLink.defaultProps = {
+  onFocus: undefined,
+  onPointerEnter: undefined,
 };
 
 export function Period({ children }) {

@@ -1,7 +1,6 @@
 import PropTypes from "prop-types";
 import { useState } from "react";
 import { FaArrowLeft, FaCheck, FaPaperPlane } from "react-icons/fa6";
-import { profile } from "../../data";
 import { ThemeToggle } from "./content";
 
 const web3FormsAccessKey = "e824487e-2f68-4a24-bd25-460b589e2df8";
@@ -17,7 +16,7 @@ const statusMessages = {
   idle: "Messages go straight to my inbox.",
   submitting: "Sending your message.",
   success: "Thanks. I'll get back to you soon.",
-  error: "That didn't send. Try again or use the email link below.",
+  error: "That didn't send. Try again in a moment.",
 };
 
 async function submitContactForm(form) {
@@ -129,10 +128,6 @@ export default function ContactPage({ colorMode, onToggleColorMode }) {
             </button>
           </div>
         </form>
-
-        <p className="contact-direct">
-          Or email me directly at <a href={`mailto:${profile.email}`}>{profile.email}</a>
-        </p>
       </main>
     </div>
   );

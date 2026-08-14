@@ -265,7 +265,7 @@ button:focus-visible {
 .prototype-page p { margin: 0; }
 
 .profile-intro {
-  padding-bottom: 34px;
+  padding-bottom: 13px;
   border-bottom: 1px solid var(--p-line);
 }
 
@@ -288,6 +288,8 @@ button:focus-visible {
   scroll-margin-top: 76px;
   margin-top: 64px;
 }
+
+.experience-timeline { margin-top: 38px; }
 
 .section-title {
   width: fit-content;
@@ -571,78 +573,144 @@ button:focus-visible {
 
 .project-link-content { min-width: 0; }
 
+.project-browser {
+  display: grid;
+  grid-template-columns: minmax(0, 0.92fr) minmax(300px, 1.08fr);
+  align-items: start;
+  gap: 20px;
+}
+
 .project-list {
   display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 10px;
+  gap: 2px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
 }
 
-.project-card {
+.project-row {
   display: block;
-  overflow: hidden;
-  border: 1px dashed var(--p-line-strong);
-  border-radius: var(--p-radius);
-  background: var(--p-surface);
-  aspect-ratio: 1.18;
-  transition: border-color 160ms ease-out, background 160ms ease-out, transform 160ms ease-out;
+  border: 1px solid transparent;
+  border-radius: 3px;
+  transition: border-color 140ms ease-out, background 140ms ease-out;
 }
 
-.project-card .project-link-content { height: 100%; }
+.project-row .project-link-content {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 14px;
+  min-height: 58px;
+  padding: 8px 10px;
+}
 
-.project-copy {
-  display: flex;
+.project-row-copy {
+  display: grid;
   min-width: 0;
-  flex-direction: column;
-  justify-content: space-between;
-  height: 100%;
-  padding: 18px;
+  gap: 3px;
 }
 
 .project-title-row {
   display: flex;
-  align-items: start;
-  justify-content: space-between;
-  gap: 12px;
+  min-width: 0;
+  align-items: baseline;
+  gap: 8px;
 }
 
 .project-title-row h3 {
+  flex: none;
   color: var(--p-strong);
-  font-size: 14px;
+  font-size: 12px;
   font-weight: 600;
   letter-spacing: -0.02em;
 }
 
-.project-title-row svg {
-  width: 11px;
-  height: 11px;
-  flex: none;
-  margin-top: 4px;
-  color: var(--p-faint);
-}
-
-.project-copy > p {
-  margin: 13px 0 17px;
-  color: var(--p-muted);
-  font-size: 10.5px;
-  line-height: 1.55;
-}
-
-.project-copy > span {
+.project-title-row span {
+  overflow: hidden;
   color: var(--p-faint);
   font-family: var(--p-font-meta);
-  font-size: 8.5px;
+  font-size: 8px;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
-.project-card:hover,
-.project-card:focus-visible {
-  border-style: solid;
-  border-color: var(--p-accent);
-  background: var(--p-accent-soft);
-  transform: translateY(-2px);
+.project-row-copy > p {
+  overflow: hidden;
+  color: var(--p-muted);
+  font-size: 9.5px;
+  line-height: 1.45;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
-.project-card:hover .project-title-row svg,
-.project-card:focus-visible .project-title-row svg { color: var(--p-accent); }
+.project-row .project-link-content > svg {
+  width: 10px;
+  height: 10px;
+  flex: none;
+  color: var(--p-faint);
+  transition: color 140ms ease-out, transform 160ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.project-list > li[data-active="true"] .project-row,
+.project-row:hover,
+.project-row:focus-visible {
+  border-color: var(--p-line-strong);
+  background: var(--p-surface);
+}
+
+.project-row:hover .project-link-content > svg,
+.project-row:focus-visible .project-link-content > svg {
+  color: var(--p-strong);
+  transform: translate(1px, -1px);
+}
+
+.project-preview {
+  position: sticky;
+  top: 82px;
+  margin: 0;
+}
+
+.project-preview-frame {
+  position: relative;
+  overflow: hidden;
+  border: 1px solid var(--p-line-strong);
+  border-radius: var(--p-radius);
+  background: var(--p-surface);
+  aspect-ratio: 5 / 3;
+}
+
+.project-preview-frame img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  opacity: 0;
+  filter: grayscale(0.25) brightness(0.74) contrast(0.94);
+  transform: scale(1.015);
+  transition: opacity 180ms ease-out, transform 240ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+html[data-color-mode="light"] .project-preview-frame img {
+  filter: grayscale(0.12) brightness(0.96) contrast(0.96);
+}
+
+.project-preview-frame img.is-active {
+  opacity: 1;
+  transform: scale(1);
+}
+
+.project-preview figcaption {
+  display: flex;
+  justify-content: space-between;
+  gap: 20px;
+  padding-top: 8px;
+  color: var(--p-faint);
+  font-family: var(--p-font-meta);
+  font-size: 8px;
+}
+
+.project-preview figcaption > span:first-child { color: var(--p-text); }
 
 .contact-invite {
   display: flex;
@@ -913,8 +981,7 @@ button:focus-visible {
   gap: 20px;
 }
 
-.contact-form-footer p,
-.contact-direct {
+.contact-form-footer p {
   margin: 0;
   color: var(--p-faint);
   font-size: 10px;
@@ -929,14 +996,6 @@ button:focus-visible {
 .contact-form-footer p[data-status="error"] { color: var(--p-previous); }
 
 .contact-form button { cursor: pointer; }
-
-.contact-direct {
-  margin-top: 34px;
-  padding-top: 20px;
-  border-top: 1px solid var(--p-line);
-}
-
-.contact-direct a { color: var(--p-text); }
 
 @media (hover: hover) and (pointer: fine) {
   .skill-item img {
@@ -987,18 +1046,18 @@ button:focus-visible {
 
 }
 
+@media (max-width: 680px) {
+  .project-browser { grid-template-columns: minmax(0, 1fr); }
+  .project-preview { display: none; }
+}
+
 @media (max-width: 540px) {
-  .project-list { grid-template-columns: 1fr; }
-  .project-card { aspect-ratio: auto; }
-  .project-card .project-link-content,
-  .project-copy { min-height: 142px; }
+  .project-row .project-link-content { min-height: 62px; }
 }
 
 @media (max-width: 430px) {
   .prototype-page { font-size: 12px; }
   .profile-heading { align-items: flex-start; }
-  .project-copy { padding: 18px; }
-
   .timeline-list > li { padding-left: 36px; }
   .timeline-summary { gap: 10px; }
   .timeline-list time,
@@ -1038,7 +1097,9 @@ button:focus-visible {
     animation: none;
   }
 
-  .project-card,
+  .project-row,
+  .project-row .project-link-content > svg,
+  .project-preview-frame img,
   .contact-cta,
   .contact-cta-arrow,
   .contact-cta-arrow svg,
