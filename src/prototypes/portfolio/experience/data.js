@@ -11,15 +11,29 @@ const detailsByRole = {
     focus: ["Snowflake", "dbt", "Automation"],
   },
   "Desktop Support Assistant": {
-    details: ["Technical support for the devices, software, and access issues used across campus."],
+    details: [
+      "Provided technical support by answering phone calls and remotely accessing users' devices to troubleshoot and resolve issues efficiently.",
+      "Assisted users in person, addressing walk-in inquiries and delivering prompt solutions to technical challenges.",
+      "Re-imaged devices to maintain system integrity and improve performance, facilitating a smooth user experience.",
+      "Set up labs, classrooms, and faculty workstations, ensuring all equipment was operational and ready for use.",
+    ],
     focus: ["Device support", "Troubleshooting", "Campus IT"],
   },
   "Peer Tutor": {
-    details: ["Individual and small-group support for students working through computer science coursework."],
+    details: [
+      "Adapted teaching methods to accommodate diverse learning styles and ensure comprehension of challenging subjects.",
+      "Developed supplementary materials and resources to reinforce learning and address specific student needs.",
+      "Facilitated one-on-one tutoring sessions, helping students grasp complex computer science concepts and improve their academic performance.",
+      "Assisted peers in understanding programming languages and algorithms through tailored explanations and practical examples.",
+    ],
     focus: ["Computer science", "Peer learning", "Coursework"],
   },
   "B.S. Computer Science": {
-    details: ["B.S. in Computer Science with a 3.99 GPA."],
+    details: [
+      "Bachelor of Science in Computer Science.",
+      "Graduated with a 3.99 GPA.",
+      "Relevant coursework included Software Engineering, Parallel Computing, Programming Languages, Data Structures, Design and Analysis of Algorithms, Software Development, Software Design, Advanced Discrete Mathematics, Database Management Systems, Image Processing, Theory of Computation, and Foundations of Human-Computer Interaction.",
+    ],
     focus: ["Software", "Systems", "Problem solving"],
   },
 };
