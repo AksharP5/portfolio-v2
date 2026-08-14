@@ -48,9 +48,10 @@ export default function PortfolioPrototype({
   onToggleSound,
   soundEnabled,
 }) {
-  const [activeProjectId, setActiveProjectId] = useState(projects[0].id);
-  const activeProject = projects.find((project) => project.id === activeProjectId)
-    ?? projects[0];
+  const [hoveredProjectId, setHoveredProjectId] = useState(null);
+  const [focusedProjectId, setFocusedProjectId] = useState(null);
+  const activeProjectId = hoveredProjectId ?? focusedProjectId;
+  const activeProject = projects.find((project) => project.id === activeProjectId);
 
   return (
     <div className="prototype-shell">
@@ -75,7 +76,13 @@ export default function PortfolioPrototype({
         <section id="projects" className="prototype-section" aria-labelledby="projects-title">
           <SectionTitle id="projects-title">My Projects</SectionTitle>
           <div className="project-browser">
-            <ol className="project-list">
+            <ol
+              className="project-list"
+              onPointerLeave={() => {
+                setHoveredProjectId(null);
+                setFocusedProjectId(null);
+              }}
+            >
               {projects.map((project) => (
                 <li
                   data-active={project.id === activeProjectId ? "true" : "false"}
@@ -84,8 +91,9 @@ export default function PortfolioPrototype({
                   <ProjectLink
                     className="project-row"
                     project={project}
-                    onFocus={() => setActiveProjectId(project.id)}
-                    onPointerEnter={() => setActiveProjectId(project.id)}
+                    onBlur={() => setFocusedProjectId(null)}
+                    onFocus={() => setFocusedProjectId(project.id)}
+                    onPointerEnter={() => setHoveredProjectId(project.id)}
                   >
                     <div className="project-row-copy">
                       <div className="project-title-row">
@@ -100,7 +108,11 @@ export default function PortfolioPrototype({
               ))}
             </ol>
 
-            <figure className="project-preview" aria-hidden="true">
+            <figure
+              className="project-preview"
+              data-visible={activeProject ? "true" : "false"}
+              aria-hidden="true"
+            >
               <div className="project-preview-frame">
                 {projects.map((project, index) => (
                   <img
@@ -113,12 +125,8 @@ export default function PortfolioPrototype({
                 ))}
               </div>
               <figcaption>
-                <span>{activeProject.title}</span>
-                <span>
-                  {activeProject.detail
-                    ? "Project notes"
-                    : activeProject.demo ? "Live demo" : "Repository"}
-                </span>
+                <span>{activeProject?.title ?? ""}</span>
+                <span>{activeProject ? "Read project" : ""}</span>
               </figcaption>
             </figure>
           </div>

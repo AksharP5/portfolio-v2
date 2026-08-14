@@ -106,7 +106,7 @@
 }
 
 .social-morph-triggers svg { width: 21px; height: 21px; }
-.social-morph-triggers a[aria-current="true"] { color: #efeee9; }
+.social-morph-triggers a[data-active] { color: #efeee9; }
 .social-morph-label { display: none; }
 
 .social-morph-panel {

@@ -14,75 +14,120 @@ export const projects = [
   {
     id: "opencode",
     title: "OpenCode",
+    role: "Open-source contributor",
     stack: ["TypeScript"],
     description:
       "Contributed usability improvements across provider connection, help, status, and dialog workflows in an open-source AI coding agent.",
+    contributions: [
+      "Improved provider connection flows and the guidance shown when setup fails.",
+      "Refined help, status, and dialog interactions across the application.",
+    ],
     source: "https://github.com/anomalyco/opencode",
   },
   {
     id: "blippy",
     title: "blippy",
+    role: "Creator",
     stack: ["Rust", "SQLite", "GitHub API"],
     description:
       "Built a keyboard-first TUI for GitHub issues and pull requests with review threads, diff views, and local SQLite-backed sync.",
+    contributions: [
+      "Designed a keyboard-first workflow for browsing GitHub issues and pull requests.",
+      "Built review threads, diff views, and local SQLite-backed synchronization.",
+    ],
     source: "https://github.com/AksharP5/blippy",
   },
   {
     id: "patchline",
     title: "Patchline",
+    role: "Creator",
     stack: ["Go", "JavaScript"],
     description:
       "Developed a standalone Go CLI to manage plugin versions for OpenCode, including syncing, upgrading, and enabling fast recovery through rollback.",
+    contributions: [
+      "Built plugin sync and upgrade commands around a standalone Go CLI.",
+      "Added version rollback so a broken upgrade can be recovered quickly.",
+    ],
     source: "https://github.com/AksharP5/Patchline",
   },
   {
     id: "packaged-resume",
     title: "Packaged Resume",
+    role: "Creator",
     stack: ["Node.js", "JavaScript", "Git"],
     description:
       "Developed an interactive command-line resume distributed as an npm package, with formatted text, JSON, and QR code output modes.",
+    contributions: [
+      "Packaged an interactive resume for direct use through npm.",
+      "Added formatted text, JSON, and QR code output modes.",
+    ],
     source: "https://github.com/AksharP5/akshar-resume",
     demo: "https://www.linkedin.com/posts/akshar5_recruiter-can-you-send-me-your-resume-activity-7379115439269838848-Qspk/",
   },
   {
     id: "find-fake-friends",
     title: "Find Fake Friends",
+    role: "Creator",
     stack: ["JavaScript", "HTML", "CSS", "Git"],
     description:
       "Built a privacy-first web app that analyzes Instagram data entirely in the browser with drag-and-drop ZIP upload.",
+    contributions: [
+      "Built drag-and-drop support for exported Instagram ZIP files.",
+      "Kept all account analysis in the browser so uploaded data never leaves the device.",
+    ],
     source: "https://github.com/AksharP5/FindFakeFriends",
     demo: "https://aksharp5.github.io/FindFakeFriends/",
   },
   {
     id: "bear-necessities-market",
     title: "Bear Necessities Market",
+    role: "Contributor",
     stack: ["JavaScript", "Vue.js", "Docker", "RabbitMQ", "MongoDB"],
     description:
       "Built reporting APIs and RabbitMQ data pipelines for open-source food-pantry software spanning inventory, anonymous visits, and usage reports.",
+    contributions: [
+      "Built reporting APIs for inventory, anonymous visits, and pantry usage.",
+      "Developed RabbitMQ pipelines that move reporting data between services.",
+    ],
     source: "https://gitlab.com/LibreFoodPantry/client-solutions/bear-necessities-market",
   },
   {
     id: "ourplcc",
     title: "ourPLCC",
+    role: "Contributor",
     stack: ["Python", "Java", "Docker", "Git"],
     description:
       "Implemented LL(1) grammar validation and Paull's algorithm for a compiler toolkit used to teach programming-language concepts.",
+    contributions: [
+      "Implemented LL(1) grammar validation for the compiler toolkit.",
+      "Added Paull's algorithm to support grammar transformation workflows.",
+    ],
     source: "https://github.com/ourPLCC",
   },
   {
     id: "portfolio",
     title: "Portfolio",
+    role: "Creator",
     stack: ["JavaScript", "HTML", "CSS", "Git"],
     description:
       "A responsive personal portfolio highlighting projects, skills, experience, social links, and direct contact.",
+    contributions: [
+      "Designed and built the responsive portfolio experience.",
+      "Connected project browsing, social links, a resume viewer, and direct contact.",
+    ],
     source: "https://github.com/AksharP5/portfolio-v2",
   },
   {
     id: "get-spotify-stats",
     title: "Get Spotify Stats",
+    role: "Creator",
     stack: ["Python", "Flask", "HTML", "CSS"],
     description:
       "A Flask website for Spotify account statistics, trending music, and personalized song recommendations.",
+    contributions: [
+      "Built account-level Spotify statistics and trending music views.",
+      "Added personalized song recommendations through a Flask web application.",
+    ],
     source: "https://github.com/AksharP5/GetSpotifyStats",
   },
 ];

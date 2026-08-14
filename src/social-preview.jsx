@@ -240,13 +240,13 @@ export function SocialMorph({ resumeHref = "/resume" }) {
       onBlur={(event) => {
         if (!event.currentTarget.contains(event.relatedTarget)) setOpen(false);
       }}
+      onPointerLeave={(event) => {
+        if (event.pointerType === "mouse") setOpen(false);
+      }}
     >
       <nav
         className="social-morph-triggers"
         aria-label="Portfolio links"
-        onPointerLeave={(event) => {
-          if (event.pointerType === "mouse") setOpen(false);
-        }}
       >
         {socials.map((item, index) => {
           const Icon = item.icon;
@@ -259,7 +259,7 @@ export function SocialMorph({ resumeHref = "/resume" }) {
               target={href.startsWith("http") ? "_blank" : undefined}
               rel={href.startsWith("http") ? "noreferrer" : undefined}
               aria-label={item.label}
-              aria-current={active === index ? "true" : undefined}
+              data-active={open && active === index ? "" : undefined}
               onPointerEnter={(event) => {
                 if (event.pointerType === "mouse") select(index, true);
               }}

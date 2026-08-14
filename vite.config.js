@@ -34,8 +34,23 @@ function previewViewCount() {
   }
 }
 
+function prototypeProjectRoutes() {
+  return {
+    name: 'prototype-project-routes',
+    configureServer(server) {
+      server.middlewares.use((request, _response, next) => {
+        const pathname = request.url?.split('?')[0]
+        if (/^\/prototypes\/projects\/[^/]+\/?$/.test(pathname)) {
+          request.url = '/prototypes/'
+        }
+        next()
+      })
+    },
+  }
+}
+
 export default defineConfig({
-  plugins: [react(), previewViewCount()],
+  plugins: [react(), prototypeProjectRoutes(), previewViewCount()],
   server: {
     allowedHosts: [
       'akshars-macbook-pro.taild065ac.ts.net',

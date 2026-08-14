@@ -74,22 +74,22 @@ PrototypeTools.propTypes = {
   soundEnabled: PropTypes.bool.isRequired,
 };
 
-export function ProjectLink({ children, className, onFocus, onPointerEnter, project }) {
-  const href = project.detail ?? project.demo ?? project.source;
-  const destination = project.detail
-    ? "Project notes"
-    : project.demo
-      ? "Live project"
-      : "Source code";
-  const isExternal = href.startsWith("http");
+export function ProjectLink({
+  children,
+  className,
+  onBlur,
+  onFocus,
+  onPointerEnter,
+  project,
+}) {
+  const href = `/prototypes/projects/${project.id}/`;
 
   return (
     <a
       className={`project-link ${className}`}
       href={href}
-      target={isExternal ? "_blank" : undefined}
-      rel={isExternal ? "noreferrer" : undefined}
-      aria-label={`${project.title}: ${destination}`}
+      aria-label={`Read about ${project.title}`}
+      onBlur={onBlur}
       onFocus={onFocus}
       onPointerEnter={onPointerEnter}
     >
@@ -101,17 +101,17 @@ export function ProjectLink({ children, className, onFocus, onPointerEnter, proj
 ProjectLink.propTypes = {
   children: PropTypes.node.isRequired,
   className: PropTypes.string.isRequired,
+  onBlur: PropTypes.func,
   onFocus: PropTypes.func,
   onPointerEnter: PropTypes.func,
   project: PropTypes.shape({
-    detail: PropTypes.string,
-    demo: PropTypes.string,
-    source: PropTypes.string.isRequired,
+    id: PropTypes.string.isRequired,
     title: PropTypes.string.isRequired,
   }).isRequired,
 };
 
 ProjectLink.defaultProps = {
+  onBlur: undefined,
   onFocus: undefined,
   onPointerEnter: undefined,
 };

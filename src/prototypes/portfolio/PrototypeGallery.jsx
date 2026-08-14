@@ -1,9 +1,10 @@
 import { useCallback, useEffect, useLayoutEffect, useState } from "react";
 import { SocialMorph } from "../../social-preview";
-import { profile } from "../../data";
+import { profile, projects } from "../../data";
 import ContactPage from "./ContactPage";
 import OpeningSequence from "./OpeningSequence";
 import PortfolioPrototype from "./PortfolioPrototype";
+import ProjectPage from "./ProjectPage";
 
 function initialColorMode() {
   const saved = window.localStorage.getItem("portfolio-prototype-color-mode");
@@ -16,7 +17,10 @@ function initialSoundEnabled() {
 }
 
 export default function PrototypeGallery() {
-  const isContactPage = window.location.pathname.replace(/\/+$/, "") === "/prototypes/contact";
+  const pathname = window.location.pathname.replace(/\/+$/, "");
+  const isContactPage = pathname === "/prototypes/contact";
+  const projectId = pathname.match(/^\/prototypes\/projects\/([^/]+)$/)?.[1];
+  const project = projects.find((item) => item.id === projectId);
   const [colorMode, setColorMode] = useState(initialColorMode);
   const [soundEnabled, setSoundEnabled] = useState(initialSoundEnabled);
   const [openingRun, setOpeningRun] = useState(0);
@@ -59,6 +63,19 @@ export default function PrototypeGallery() {
         <ContactPage
           colorMode={colorMode}
           onToggleColorMode={toggleColorMode}
+        />
+        <div className="social-dock"><SocialMorph resumeHref="/resume?from=prototype" /></div>
+      </div>
+    );
+  }
+
+  if (project) {
+    return (
+      <div id="stage" className="prototype-stage">
+        <ProjectPage
+          colorMode={colorMode}
+          onToggleColorMode={toggleColorMode}
+          project={project}
         />
         <div className="social-dock"><SocialMorph resumeHref="/resume?from=prototype" /></div>
       </div>
