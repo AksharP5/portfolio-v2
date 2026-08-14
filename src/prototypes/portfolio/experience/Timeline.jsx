@@ -7,9 +7,9 @@ import { experienceRecords } from "./data";
 const experienceItemProp = PropTypes.shape({
   company: PropTypes.string.isRequired,
   current: PropTypes.bool.isRequired,
+  details: PropTypes.arrayOf(PropTypes.string.isRequired).isRequired,
   period: PropTypes.string.isRequired,
   role: PropTypes.string.isRequired,
-  summary: PropTypes.string.isRequired,
 });
 
 function TimelineItem({ defaultOpen, item }) {
@@ -49,7 +49,9 @@ function TimelineItem({ defaultOpen, item }) {
           role="region"
           aria-labelledby={triggerId}
         >
-          <p>{item.summary}</p>
+          <ul className="timeline-bullets">
+            {item.details.map((detail) => <li key={detail}>{detail}</li>)}
+          </ul>
         </div>
       ) : null}
     </li>
