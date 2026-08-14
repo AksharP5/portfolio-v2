@@ -661,16 +661,22 @@ button:focus-visible {
   transform: translate(1px, -1px);
 }
 
-.project-preview {
-  position: absolute;
-  top: 50%;
-  left: calc(100% + 18px);
+.project-preview-positioner {
+  position: fixed;
+  top: 0;
   z-index: 10;
-  width: min(340px, calc((100vw - 700px) / 2 - 18px));
+  pointer-events: none;
+}
+
+.project-preview-positioner[data-moving="true"] {
+  transition: transform 190ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.project-preview {
   margin: 0;
   opacity: 0;
-  pointer-events: none;
-  transform: translateY(-50%) scale(0.985);
+  transform: translateX(5px) scale(0.985);
+  transform-origin: left top;
   visibility: hidden;
   transition:
     opacity 140ms ease-out,
@@ -680,7 +686,7 @@ button:focus-visible {
 
 .project-preview[data-visible="true"] {
   opacity: 1;
-  transform: translateY(-50%) scale(1);
+  transform: translateX(0) scale(1);
   visibility: visible;
   transition-delay: 0s;
 }
@@ -1168,7 +1174,7 @@ html[data-color-mode="light"] .project-detail-image {
 }
 
 @media (max-width: 1199px) {
-  .project-preview { display: none; }
+  .project-preview-positioner { display: none; }
 }
 
 @media (max-width: 540px) {
@@ -1221,6 +1227,7 @@ html[data-color-mode="light"] .project-detail-image {
   .project-row .project-link-content > svg,
   .project-preview-frame img,
   .project-preview,
+  .project-preview-positioner,
   .project-detail-links a,
   .contact-cta,
   .contact-cta-arrow,
