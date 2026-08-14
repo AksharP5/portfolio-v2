@@ -43,7 +43,7 @@ export default function ResumePage() {
 
       <iframe
         className="resume-viewer"
-        src={`${resumePath}#page=1&zoom=page-width&pagemode=none`}
+        src={`${resumePath}#page=1&zoom=100&pagemode=none`}
         title="Akshar Patel resume"
       />
     </main>
