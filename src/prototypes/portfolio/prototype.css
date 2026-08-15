@@ -773,6 +773,13 @@ html[data-color-mode="light"] .project-preview-frame img {
 .project-page,
 .projects-page { min-height: 100dvh; }
 
+.project-page > .contact-navigation,
+.projects-page > .contact-navigation {
+  position: sticky;
+  top: 0;
+  z-index: 20;
+}
+
 .projects-index-shell {
   width: min(calc(100% - 36px), 700px);
   margin: 0 auto;
