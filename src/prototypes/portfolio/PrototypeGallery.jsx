@@ -22,7 +22,9 @@ function initialSoundEnabled() {
 }
 
 export default function PrototypeGallery() {
-  const pathname = window.location.pathname.replace(/\/+$/, "");
+  const [routeHref, setRouteHref] = useState(() => window.location.href);
+  const route = new URL(routeHref);
+  const pathname = route.pathname.replace(/\/+$/, "");
   const isContactPage = pathname === "/prototypes/contact";
   const isProjectsPage = pathname === "/prototypes/projects";
   const projectId = pathname.match(/^\/prototypes\/projects\/([^/]+)$/)?.[1];
@@ -32,9 +34,29 @@ export default function PrototypeGallery() {
   const [soundEnabled, setSoundEnabled] = useState(initialSoundEnabled);
   const [openingRun, setOpeningRun] = useState(0);
   const [showOpening, setShowOpening] = useState(
-    () => !isReturningHome
+    () => !isSubpage
+      && !isReturningHome
       && !window.matchMedia("(prefers-reduced-motion: reduce)").matches,
   );
+
+  useLayoutEffect(() => {
+    let pageTitle = "Portfolio prototype - Akshar";
+    if (isContactPage) pageTitle = "Contact Akshar";
+    else if (project) pageTitle = `${project.title} - Akshar`;
+    else if (isProjectsPage) pageTitle = "Projects - Akshar";
+    document.title = pageTitle;
+
+    const scrollBehavior = document.documentElement.style.scrollBehavior;
+    document.documentElement.style.scrollBehavior = "auto";
+
+    if (route.hash) {
+      document.getElementById(route.hash.slice(1))?.scrollIntoView();
+    } else {
+      window.scrollTo(0, 0);
+    }
+
+    document.documentElement.style.scrollBehavior = scrollBehavior;
+  }, [isContactPage, isProjectsPage, project, route.hash]);
 
   useLayoutEffect(() => {
     document.documentElement.dataset.colorMode = colorMode;
@@ -51,6 +73,47 @@ export default function PrototypeGallery() {
       soundEnabled ? "on" : "off",
     );
   }, [soundEnabled]);
+
+  useEffect(() => {
+    const handleNavigation = (event) => {
+      if (
+        event.defaultPrevented
+        || event.button !== 0
+        || event.metaKey
+        || event.ctrlKey
+        || event.shiftKey
+        || event.altKey
+      ) return;
+
+      const target = event.target instanceof Element
+        ? event.target.closest("a[href]")
+        : null;
+      if (
+        !target
+        || target.hasAttribute("download")
+        || (target.target && target.target !== "_self")
+      ) return;
+
+      const nextRoute = new URL(target.href);
+      if (
+        nextRoute.origin !== window.location.origin
+        || !nextRoute.pathname.startsWith("/prototypes/")
+      ) return;
+
+      event.preventDefault();
+      window.history.pushState(null, "", nextRoute.href);
+      setRouteHref(nextRoute.href);
+    };
+
+    const handleHistoryChange = () => setRouteHref(window.location.href);
+
+    document.addEventListener("click", handleNavigation);
+    window.addEventListener("popstate", handleHistoryChange);
+    return () => {
+      document.removeEventListener("click", handleNavigation);
+      window.removeEventListener("popstate", handleHistoryChange);
+    };
+  }, []);
 
   useEffect(() => {
     if (isSubpage) {
