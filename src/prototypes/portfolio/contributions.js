@@ -6,7 +6,7 @@ export const contributionGroups = [
     contributions: [
       {
         number: 3282,
-        state: "open",
+        state: "merged",
         title: "feat(studio): add a preview volume control",
         description:
           "Adds a persistent 0-100% preview volume control without changing rendered composition audio.",
@@ -132,7 +132,7 @@ export const contributionGroups = [
       },
       {
         number: 6547,
-        state: "open",
+        state: "merged",
         title: "fix(web): keep floating preview anchored after panel closes",
         description:
           "Keeps untouched previews anchored after the side panel closes while preserving user-moved positions.",
@@ -140,7 +140,7 @@ export const contributionGroups = [
       },
       {
         number: 5468,
-        state: "open",
+        state: "merged",
         title: "fix(codex): keep background memory out of chats",
         description:
           "Filters background memory-thread notifications before they can appear in the active conversation.",
@@ -262,177 +262,6 @@ export const contributionGroups = [
         description:
           "Adds the --json flag so Ralphy can read product requirements from JSON files.",
         url: "https://github.com/michaelshimeles/ralphy/pull/84",
-      },
-    ],
-  },
-  {
-    name: "PLCC NG",
-    repository: "ourPLCC/plcc-ng",
-    url: "https://github.com/ourPLCC/plcc-ng",
-    contributions: [
-      {
-        number: 59,
-        state: "merged",
-        title: "check left recursion",
-        description:
-          "Detects left-recursive rules before a grammar reaches later compiler stages.",
-        url: "https://github.com/ourPLCC/plcc-ng/pull/59",
-      },
-      {
-        number: 57,
-        state: "merged",
-        title: "wip: cli rough sketch",
-        description:
-          "Introduces the initial command-line structure for the next PLCC implementation.",
-        url: "https://github.com/ourPLCC/plcc-ng/pull/57",
-      },
-    ],
-  },
-  {
-    name: "PLCC Reorganization",
-    repository: "ourPLCC/plcc-reorg",
-    url: "https://github.com/ourPLCC/plcc-reorg",
-    contributions: [
-      {
-        number: 65,
-        state: "merged",
-        title: "refactor: check defined terminals in repeating rules",
-        description:
-          "Applies terminal-definition validation consistently to repeating grammar rules.",
-        url: "https://github.com/ourPLCC/plcc-reorg/pull/65",
-      },
-      {
-        number: 57,
-        state: "merged",
-        title: "feat: terminals in syntactical spec must be defined in lexical spec",
-        description:
-          "Flags syntax terminals that do not have matching definitions in the lexical specification.",
-        url: "https://github.com/ourPLCC/plcc-reorg/pull/57",
-      },
-      {
-        number: 20,
-        state: "merged",
-        title: "LL1 validator",
-        description:
-          "Implements LL(1) grammar validation with FIRST and FOLLOW set conflict detection.",
-        url: "https://github.com/ourPLCC/plcc-reorg/pull/20",
-      },
-      {
-        number: 14,
-        state: "merged",
-        title: "feat: add lexical validator",
-        description:
-          "Adds validation for lexical rules before parser generation begins.",
-        url: "https://github.com/ourPLCC/plcc-reorg/pull/14",
-      },
-      {
-        number: 8,
-        state: "merged",
-        title: "Split Rough Spec",
-        description:
-          "Splits the rough language specification into smaller sections for later validation work.",
-        url: "https://github.com/ourPLCC/plcc-reorg/pull/8",
-      },
-    ],
-  },
-  {
-    name: "PLCC",
-    repository: "ourPLCC/plcc",
-    url: "https://github.com/ourPLCC/plcc",
-    contributions: [
-      {
-        number: 141,
-        state: "closed",
-        title: "Refactor: Split Rough Spec",
-        description:
-          "An earlier attempt to split the rough language specification into smaller sections.",
-        url: "https://github.com/ourPLCC/plcc/pull/141",
-      },
-      {
-        number: 128,
-        state: "merged",
-        title: "docs: fix typo in README.md",
-        description:
-          "Corrects a typo in the PLCC project documentation.",
-        url: "https://github.com/ourPLCC/plcc/pull/128",
-      },
-      {
-        number: 109,
-        state: "closed",
-        title: "Fix ABC test issue",
-        description:
-          "Corrects the ABC language test case and its expected output.",
-        url: "https://github.com/ourPLCC/plcc/pull/109",
-      },
-    ],
-  },
-  {
-    name: "PLCC Languages",
-    repository: "ourPLCC/languages",
-    url: "https://github.com/ourPLCC/languages",
-    contributions: [
-      {
-        number: 20,
-        state: "merged",
-        title: "refactor: reorganize the repository and update tests",
-        description:
-          "Reorganizes the language repository and updates tests for the new structure.",
-        url: "https://github.com/ourPLCC/languages/pull/20",
-      },
-      {
-        number: 18,
-        state: "merged",
-        title: "upgrade bats",
-        description:
-          "Updates the Bats test framework used by the language test suite.",
-        url: "https://github.com/ourPLCC/languages/pull/18",
-      },
-      {
-        number: 15,
-        state: "merged",
-        title: "fix: run tests without relying on git",
-        description:
-          "Lets the language tests run without depending on Git repository metadata.",
-        url: "https://github.com/ourPLCC/languages/pull/15",
-      },
-      {
-        number: 13,
-        state: "merged",
-        title: "Create workflow for languages tests",
-        description:
-          "Adds a continuous-integration workflow for the language test suite.",
-        url: "https://github.com/ourPLCC/languages/pull/13",
-      },
-      {
-        number: 11,
-        state: "merged",
-        title: "Update Path For Tests",
-        description:
-          "Corrects test paths so the suite can find the expected language fixtures.",
-        url: "https://github.com/ourPLCC/languages/pull/11",
-      },
-      {
-        number: 8,
-        state: "merged",
-        title: "Add automated testing in GitPod",
-        description:
-          "Adds automatic test execution to the GitPod development environment.",
-        url: "https://github.com/ourPLCC/languages/pull/8",
-      },
-    ],
-  },
-  {
-    name: "PLCC Course Materials",
-    repository: "ourPLCC/course-materials",
-    url: "https://github.com/ourPLCC/course-materials",
-    contributions: [
-      {
-        number: 19,
-        state: "merged",
-        title: "Replace include with #include",
-        description:
-          "Corrects the include directive shown in the PLCC course materials.",
-        url: "https://github.com/ourPLCC/course-materials/pull/19",
       },
     ],
   },
