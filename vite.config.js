@@ -40,7 +40,7 @@ function prototypeProjectRoutes() {
     configureServer(server) {
       server.middlewares.use((request, _response, next) => {
         const pathname = request.url?.split('?')[0]
-        if (/^\/prototypes\/projects\/[^/]+\/?$/.test(pathname)) {
+        if (/^\/prototypes\/projects(?:\/[^/]+)?\/?$/.test(pathname)) {
           request.url = '/prototypes/'
         }
         next()

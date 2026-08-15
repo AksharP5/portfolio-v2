@@ -1,6 +1,5 @@
 import PropTypes from "prop-types";
-import { useState } from "react";
-import { FaArrowRightLong, FaArrowUpRightFromSquare } from "react-icons/fa6";
+import { FaArrowRightLong } from "react-icons/fa6";
 import aemIcon from "../../assets/skills/aem-design.png";
 import dockerIcon from "../../assets/skills/docker.png";
 import flaskIcon from "../../assets/skills/flask.png";
@@ -14,8 +13,9 @@ import rabbitIcon from "../../assets/skills/rabbitmq-logo.png";
 import sqlIcon from "../../assets/skills/sql.png";
 import tsIcon from "../../assets/skills/tslogo.png";
 import { profile, projects } from "../../data";
-import { ProjectLink, PrototypeTools } from "./content";
+import { PrototypeTools } from "./content";
 import ExperienceExplorer from "./experience/ExperienceExplorer";
+import ProjectBrowser from "./ProjectBrowser";
 
 const skillIcons = [
   ["Python", pythonIcon],
@@ -31,6 +31,11 @@ const skillIcons = [
   ["Git", gitIcon],
   ["AEM", aemIcon],
 ];
+
+const featuredProjectIds = ["opencode", "blippy", "patchline", "packaged-resume"];
+const featuredProjects = featuredProjectIds.map((id) => (
+  projects.find((project) => project.id === id)
+));
 
 function SectionTitle({ children, id }) {
   return <h2 className="section-title" id={id}>{children}</h2>;
@@ -48,28 +53,6 @@ export default function PortfolioPrototype({
   onToggleSound,
   soundEnabled,
 }) {
-  const [projectPreview, setProjectPreview] = useState(null);
-  const activeProjectId = projectPreview?.id;
-  const activeProject = projects.find((project) => project.id === activeProjectId);
-
-  const showProjectPreview = (id, element) => {
-    const rect = element.getBoundingClientRect();
-    const viewportPadding = 16;
-    const gap = 14;
-    const availableWidth = window.innerWidth - rect.right - gap - viewportPadding;
-    const width = Math.max(220, Math.min(320, availableWidth));
-    const height = width * 0.6 + 24;
-    const maxTop = Math.max(viewportPadding, window.innerHeight - height - viewportPadding);
-
-    setProjectPreview({
-      animatePosition: projectPreview !== null,
-      id,
-      left: rect.right + gap,
-      top: Math.min(Math.max(viewportPadding, rect.top), maxTop),
-      width,
-    });
-  };
-
   return (
     <div className="prototype-shell">
       <main id="home" className="prototype-page">
@@ -91,41 +74,18 @@ export default function PortfolioPrototype({
         />
 
         <section id="projects" className="prototype-section" aria-labelledby="projects-title">
-          <SectionTitle id="projects-title">My Projects</SectionTitle>
-          <div className="project-browser">
-            <ol
-              className="project-list"
-              onPointerLeave={() => setProjectPreview(null)}
-            >
-              {projects.map((project) => (
-                <li
-                  data-active={project.id === activeProjectId ? "true" : "false"}
-                  key={project.id}
-                >
-                  <ProjectLink
-                    className="project-row"
-                    project={project}
-                    onBlur={() => setProjectPreview(null)}
-                    onFocus={(event) => showProjectPreview(project.id, event.currentTarget)}
-                    onPointerEnter={(event) => showProjectPreview(project.id, event.currentTarget)}
-                  >
-                    <div className="project-row-copy">
-                      <div className="project-title-row">
-                        <h3>{project.title}</h3>
-                        <span>{project.stack.slice(0, 2).join(" / ")}</span>
-                      </div>
-                      <p>{project.description}</p>
-                    </div>
-                    <FaArrowUpRightFromSquare aria-hidden="true" />
-                  </ProjectLink>
-                </li>
-              ))}
-            </ol>
+          <div className="section-heading-row">
+            <SectionTitle id="projects-title">Projects</SectionTitle>
+            <a className="section-view-all" href="/prototypes/projects/">
+              <span>View all</span>
+              <FaArrowRightLong aria-hidden="true" />
+            </a>
           </div>
+          <ProjectBrowser projects={featuredProjects} />
         </section>
 
         <section id="skills" className="prototype-section" aria-labelledby="skills-title">
-          <SectionTitle id="skills-title">My Skills</SectionTitle>
+          <SectionTitle id="skills-title">Skills</SectionTitle>
           <div className="skill-grid">
             {skillIcons.map(([name, icon]) => (
               <div className="skill-item" key={name}>
@@ -149,38 +109,6 @@ export default function PortfolioPrototype({
           </a>
         </aside>
       </main>
-
-      <div
-        className="project-preview-positioner"
-        data-moving={projectPreview?.animatePosition ? "true" : undefined}
-        style={projectPreview ? {
-          left: projectPreview.left,
-          transform: `translate3d(0, ${projectPreview.top}px, 0)`,
-          width: projectPreview.width,
-        } : undefined}
-        aria-hidden="true"
-      >
-        <figure
-          className="project-preview"
-          data-visible={activeProject ? "true" : "false"}
-        >
-          <div className="project-preview-frame">
-            {projects.map((project, index) => (
-              <img
-                className={project.id === activeProjectId ? "is-active" : undefined}
-                src={`/projects/${project.id}.webp`}
-                alt=""
-                loading={index === 0 ? "eager" : "lazy"}
-                key={project.id}
-              />
-            ))}
-          </div>
-          <figcaption>
-            <span>{activeProject?.title ?? ""}</span>
-            <span>{activeProject ? "Read project" : ""}</span>
-          </figcaption>
-        </figure>
-      </div>
     </div>
   );
 }

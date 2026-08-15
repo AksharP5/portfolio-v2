@@ -5,6 +5,11 @@ import ContactPage from "./ContactPage";
 import OpeningSequence from "./OpeningSequence";
 import PortfolioPrototype from "./PortfolioPrototype";
 import ProjectPage from "./ProjectPage";
+import ProjectsPage from "./ProjectsPage";
+
+const returnMarker = "portfolio-prototype-returning-home";
+const isReturningHome = window.sessionStorage.getItem(returnMarker) === "true";
+if (isReturningHome) window.sessionStorage.removeItem(returnMarker);
 
 function initialColorMode() {
   const saved = window.localStorage.getItem("portfolio-prototype-color-mode");
@@ -19,13 +24,16 @@ function initialSoundEnabled() {
 export default function PrototypeGallery() {
   const pathname = window.location.pathname.replace(/\/+$/, "");
   const isContactPage = pathname === "/prototypes/contact";
+  const isProjectsPage = pathname === "/prototypes/projects";
   const projectId = pathname.match(/^\/prototypes\/projects\/([^/]+)$/)?.[1];
   const project = projects.find((item) => item.id === projectId);
+  const isSubpage = isContactPage || isProjectsPage || Boolean(project);
   const [colorMode, setColorMode] = useState(initialColorMode);
   const [soundEnabled, setSoundEnabled] = useState(initialSoundEnabled);
   const [openingRun, setOpeningRun] = useState(0);
   const [showOpening, setShowOpening] = useState(
-    () => !window.matchMedia("(prefers-reduced-motion: reduce)").matches,
+    () => !isReturningHome
+      && !window.matchMedia("(prefers-reduced-motion: reduce)").matches,
   );
 
   useLayoutEffect(() => {
@@ -40,6 +48,21 @@ export default function PrototypeGallery() {
       soundEnabled ? "on" : "off",
     );
   }, [soundEnabled]);
+
+  useEffect(() => {
+    if (isSubpage) {
+      window.sessionStorage.setItem(returnMarker, "true");
+      return undefined;
+    }
+
+    const clearReturnMarker = () => {
+      window.sessionStorage.removeItem(returnMarker);
+    };
+
+    clearReturnMarker();
+    window.addEventListener("pageshow", clearReturnMarker);
+    return () => window.removeEventListener("pageshow", clearReturnMarker);
+  }, [isSubpage]);
 
   useEffect(() => {
     if (!showOpening) return undefined;
@@ -76,6 +99,18 @@ export default function PrototypeGallery() {
           colorMode={colorMode}
           onToggleColorMode={toggleColorMode}
           project={project}
+        />
+        <div className="social-dock"><SocialMorph resumeHref="/resume?from=prototype" /></div>
+      </div>
+    );
+  }
+
+  if (isProjectsPage) {
+    return (
+      <div id="stage" className="prototype-stage">
+        <ProjectsPage
+          colorMode={colorMode}
+          onToggleColorMode={toggleColorMode}
         />
         <div className="social-dock"><SocialMorph resumeHref="/resume?from=prototype" /></div>
       </div>
