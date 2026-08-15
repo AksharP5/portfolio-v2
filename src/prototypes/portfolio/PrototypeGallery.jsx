@@ -38,6 +38,10 @@ export default function PrototypeGallery() {
 
   useLayoutEffect(() => {
     document.documentElement.dataset.colorMode = colorMode;
+    document.querySelector('meta[name="theme-color"]')?.setAttribute(
+      "content",
+      colorMode === "dark" ? "#0c0c0c" : "#f2f2f2",
+    );
     window.localStorage.setItem("portfolio-prototype-color-mode", colorMode);
   }, [colorMode]);
 
