@@ -22,7 +22,6 @@ export default function ResumePage() {
     document.title = "Resume - Akshar Patel";
 
     return () => {
-      delete document.documentElement.dataset.colorMode;
       document.title = previousTitle;
     };
   }, [colorMode]);

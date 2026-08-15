@@ -39,7 +39,6 @@ export default function PrototypeGallery() {
   useLayoutEffect(() => {
     document.documentElement.dataset.colorMode = colorMode;
     window.localStorage.setItem("portfolio-prototype-color-mode", colorMode);
-    return () => { delete document.documentElement.dataset.colorMode; };
   }, [colorMode]);
 
   useEffect(() => {
